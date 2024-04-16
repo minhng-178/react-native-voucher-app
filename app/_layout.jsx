@@ -2,9 +2,20 @@ import { useEffect } from 'react';
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from 'expo-router'
 
+
+export {
+    // Catch any errors thrown by the Layout component.
+    ErrorBoundary,
+} from "expo-router";
+
+export const unstable_settings = {
+    // Ensure that reloading on `/modal` keeps a back button present.
+    initialRouteName: "(user)",
+};
+
+
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
-
 const RootLayout = () => {
     const [fontsLoaded, error] = useFonts({
         "Poppins-Black": require("../assets/fonts/Poppins-Black.ttf"),
@@ -36,8 +47,11 @@ const RootLayout = () => {
 
     return (
         <Stack>
-            <Stack.Screen name='index' options={{ headerShown: false }} />
-            <Stack.Screen name='profile' />
+            <Stack.Screen name="(host)" options={{ headerShown: false }} />
+            <Stack.Screen name="(user)" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="cart" options={{ presentation: "modal" }} />
         </Stack>
     )
 }
