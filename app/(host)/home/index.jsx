@@ -13,8 +13,9 @@ import {
 const HomeScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
 
+
   const onRefresh = async () => {
-    // setRefreshing(true);
+    setRefreshing(true);
 
     setRefreshing(false);
   };

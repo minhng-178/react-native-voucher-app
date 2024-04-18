@@ -1,37 +1,42 @@
-import { useState } from "react";
-import { Link, router } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
+import { useState } from 'react';
+import { Link, router } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, ScrollView, Dimensions, Alert, Image } from 'react-native';
 
-import { images } from "../../constants";
-import { CustomButton, FormField } from "../../components";
+import { login } from '../../api/auth';
+import { images } from '../../constants';
+import { CustomButton, FormField } from '../../components';
+import { useAuth } from '../../providers/AuthProvider';
 
 const SignInScreen = () => {
+  const { updateAuth, logout } = useAuth();
   const [isSubmitting, setSubmitting] = useState(false);
+
   const [form, setForm] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
 
   const submit = async () => {
+    if (form.email === '' || form.password === '') {
+      Alert.alert('Error', 'Please fill in all fields');
+    }
 
-    router.push("(user)/home")
+    setSubmitting(true);
 
-    // if (form.email === "" || form.password === "") {
-    //   Alert.alert("Error", "Please fill in all fields");
-    // }
+    try {
+      const [user, tokens] = await login(form.email, form.password);
 
-    // setSubmitting(true);
-
-    // try {
-
-    //   Alert.alert("Success", "User signed in successfully");
-    //   router.replace("/home");
-    // } catch (error) {
-    //   Alert.alert("Error", error.message);
-    // } finally {
-    //   setSubmitting(false);
-    // }
+      if (!user && !tokens) {
+        Alert.alert('Login falied!');
+      }
+      //   updateAuth(user, tokens);
+      //   // router.replace("/home");
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -40,7 +45,7 @@ const SignInScreen = () => {
         <View
           className="w-full flex justify-center h-full px-4 my-6"
           style={{
-            minHeight: Dimensions.get("window").height - 100,
+            minHeight: Dimensions.get('window').height - 100,
           }}
         >
           <Image
@@ -56,8 +61,8 @@ const SignInScreen = () => {
           <FormField
             title="Email"
             value={form.email}
-            placeholder={"example@gmail.com"}
-            handleChangeText={(e) => setForm({ ...form, email: e })}
+            placeholder={'example@gmail.com'}
+            handleChangeText={e => setForm({ ...form, email: e })}
             otherStyles="mt-7"
             keyboardType="email-address"
           />
@@ -65,7 +70,7 @@ const SignInScreen = () => {
           <FormField
             title="Password"
             value={form.password}
-            handleChangeText={(e) => setForm({ ...form, password: e })}
+            handleChangeText={e => setForm({ ...form, password: e })}
             otherStyles="mt-7"
           />
 
