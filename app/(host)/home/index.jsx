@@ -14,8 +14,8 @@ const HomeScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
-    setRefreshing(true);
-    await refetch();
+    // setRefreshing(true);
+
     setRefreshing(false);
   };
 
@@ -74,7 +74,7 @@ const HomeScreen = () => {
   ];
 
   return (
-    <SafeAreaView className="bg-primary flex-1">
+    <SafeAreaView className="bg-primary">
       <FlatList
         data={data}
         keyExtractor={item => item.id}
@@ -88,7 +88,7 @@ const HomeScreen = () => {
           />
         )}
         ListHeaderComponent={() => (
-          <View className="flex my-6\2 px-4 space-y-6">
+          <View className="flex px-4 space-y-2">
             <SearchInput />
 
             <FilterInput />

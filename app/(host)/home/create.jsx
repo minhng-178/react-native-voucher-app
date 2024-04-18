@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { router } from 'expo-router';
+import { Stack, router } from 'expo-router';
 import * as DocumentPicker from 'expo-document-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {
@@ -80,15 +80,21 @@ const Create = () => {
 
   return (
     <SafeAreaView className="bg-primary h-full">
-      <ScrollView className="px-4 my-6">
-        <Text className="text-2xl text-white font-psemibold">Upload Video</Text>
+      <Stack.Screen
+        options={{
+          title: "Create voucher",
+        }}
+      />
+
+      <ScrollView className="px-4 space-y-2">
+        <Text className="text-2xl text-black font-psemibold">Create voucher</Text>
 
         <FormField
           title="Video Title"
           value={form.title}
           placeholder="Give your video a catchy title..."
           handleChangeText={e => setForm({ ...form, title: e })}
-          otherStyles="mt-10"
+          otherStyles="mt-5"
         />
 
         <View className="mt-7 space-y-2">
