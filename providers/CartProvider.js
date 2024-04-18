@@ -1,3 +1,4 @@
+import { randomUUID } from 'expo-crypto';
 import { createContext, useState } from 'react';
 
 const CartContext = createContext({
@@ -21,7 +22,7 @@ const CartProvider = ({ children }) => {
     }
 
     const newCartItem = {
-      id: randomUUID(),
+      id: 1,
       product,
       product_id: product.id,
       size,
