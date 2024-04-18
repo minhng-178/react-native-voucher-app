@@ -44,7 +44,7 @@ const Card = ({ title, creator, avatar, thumbnail }) => {
 
       <TouchableOpacity
         activeOpacity={0.7}
-        onPress={() => setPlay(true)}
+        onPress={() => {}}
         className="w-full h-60 rounded-xl mt-3 relative flex justify-center items-center"
       >
         <Image

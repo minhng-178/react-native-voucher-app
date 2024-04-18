@@ -6,7 +6,7 @@ import { View, Text, ScrollView, Dimensions, Alert, Image } from "react-native";
 import { images } from "../../constants";
 import { CustomButton, FormField } from "../../components";
 
-const SignUp = () => {
+const SignUpScreen = () => {
 
     const [isSubmitting, setSubmitting] = useState(false);
     const [form, setForm] = useState({
@@ -101,4 +101,4 @@ const SignUp = () => {
     );
 };
 
-export default SignUp;
+export default SignUpScreen;
