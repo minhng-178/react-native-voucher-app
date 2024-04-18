@@ -1,23 +1,22 @@
-import { useState } from "react";
-import { StatusBar } from "expo-status-bar";
-import { Redirect, router } from "expo-router";
-import { View, Text, ScrollView, Image } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { StatusBar } from 'expo-status-bar';
+import { Redirect, router } from 'expo-router';
+import { View, Text, ScrollView, Image, Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { images } from "../constants";
-import CustomButton from "../components/CustomButton";
-import Loader from "../components/Loader";
+import { images } from '../constants';
+import { useAuth } from '../providers/AuthProvider';
+import CustomButton from '../components/CustomButton';
 
 const Welcome = () => {
-  const [loading, isLoading] = useState(false);
+  const { isLogged } = useAuth();
+
+  if (isLogged) return <Redirect href="/home" />;
 
   return (
     <SafeAreaView>
-      <Loader isLoading={loading} />
-
       <ScrollView
         contentContainerStyle={{
-          height: "100%",
+          height: '100%',
         }}
       >
         <View className="w-full flex justify-center items-center h-full px-4">
@@ -35,8 +34,8 @@ const Welcome = () => {
 
           <View className="relative mt-5">
             <Text className="text-2xl text-black font-bold text-center">
-              Discover Endless{"\n"}
-              Possibilities with{" "}
+              Discover Endless{'\n'}
+              Possibilities with{' '}
               <Text className="text-secondary-200">E-Voucher</Text>
             </Text>
 
@@ -54,13 +53,13 @@ const Welcome = () => {
 
           <CustomButton
             title="Continue with Email"
-            handlePress={() => router.push("/sign-in")}
+            handlePress={() => router.push('/sign-in')}
             containerStyles="w-full mt-7"
           />
         </View>
       </ScrollView>
 
-      <StatusBar backgroundColor="#161622" style="light" />
+      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
     </SafeAreaView>
   );
 };
