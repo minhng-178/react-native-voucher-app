@@ -7,10 +7,13 @@ import { images } from '../constants';
 import { useAuth } from '../providers/AuthProvider';
 import CustomButton from '../components/CustomButton';
 
-const Welcome = () => {
-  const { isLogged } = useAuth();
+const WelcomeScreen = () => {
+  const { isLogged, isCustomer, isHost } = useAuth();
 
-  if (isLogged) return <Redirect href="/home" />;
+  if (isLogged && isCustomer) return <Redirect href="/(user)/home" />;
+
+  if (isLogged && isHost) return <Redirect href="/(host)/home" />;
+
 
   return (
     <SafeAreaView>
@@ -64,4 +67,4 @@ const Welcome = () => {
   );
 };
 
-export default Welcome;
+export default WelcomeScreen;

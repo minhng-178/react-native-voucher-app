@@ -5,6 +5,7 @@ import path from '../assets/images/path.png';
 import logo from '../assets/images/logo.png';
 import logoSmall from '../assets/images/logo-small.png';
 import empty from '../assets/images/empty.png';
+import page404 from '../assets/images/404.png';
 
 export const defaultAvatar =
   'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png';
@@ -17,5 +18,6 @@ export default {
   logo,
   logoSmall,
   empty,
+  page404,
   defaultAvatar,
 };
