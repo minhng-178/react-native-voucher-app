@@ -1,11 +1,10 @@
 import { Alert } from 'react-native';
+import { rolesPath } from './endpoint';
 import axiosInstance from './axiosInstance';
 
 export const getRoles = async () => {
-  const url = '/roles';
-
   try {
-    const response = await axiosInstance.get(url);
+    const response = await axiosInstance.get(rolesPath);
     if (response.status === 201) {
       return response.data;
     } else {

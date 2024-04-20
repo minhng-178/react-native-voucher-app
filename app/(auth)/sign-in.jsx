@@ -1,21 +1,25 @@
-import { useState } from 'react';
-import { Link, router } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { Link, Redirect } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View, Text, ScrollView, Dimensions, Alert, Image } from 'react-native';
 
 import { login } from '../../api/auth';
 import { images } from '../../constants';
-import { CustomButton, FormField } from '../../components';
 import { useAuth } from '../../providers/AuthProvider';
+import { CustomButton, FormField } from '../../components';
 
 const SignInScreen = () => {
-  const { updateAuth, logout } = useAuth();
+  const { updateAuth, isCustomer, isHost } = useAuth();
   const [isSubmitting, setSubmitting] = useState(false);
 
   const [form, setForm] = useState({
     email: '',
     password: '',
   });
+
+  if (isCustomer) return <Redirect href="/(user)/home" />;
+
+  if (isHost) return <Redirect href="/(host)/home" />;
 
   const submit = async () => {
     if (form.email === '' || form.password === '') {
@@ -30,8 +34,8 @@ const SignInScreen = () => {
       if (!user && !tokens) {
         Alert.alert('Login falied!');
       }
-      //   updateAuth(user, tokens);
-      //   // router.replace("/home");
+
+      updateAuth(user, tokens);
     } catch (error) {
       Alert.alert('Error', error.message);
     } finally {
