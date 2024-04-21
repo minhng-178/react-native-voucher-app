@@ -27,7 +27,7 @@ const Cart = () => {
       <CustomButton
         title="Checkout"
         onPress={() => console.log('checkout')}
-        containerStyles="mt-auto"
+        containerStyles="mt-auto mb-6"
       />
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
     </View>

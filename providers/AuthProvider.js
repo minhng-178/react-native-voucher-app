@@ -1,6 +1,7 @@
+import { router } from 'expo-router';
+import { useToast } from 'react-native-toast-notifications';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { useToast } from 'react-native-toast-notifications';
 
 import { getUser } from '../api/user';
 import { getRoles } from '../api/role';
@@ -34,6 +35,7 @@ const AuthProvider = ({ children }) => {
     setUser(null);
     setTokens(null);
     setIsLogged(false);
+    router.push('/sign-in');
     toast.show('Logged out!', { type: 'success' });
   };
 

@@ -1,4 +1,3 @@
-import { router } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { View, Image, FlatList, TouchableOpacity } from 'react-native';
 
@@ -11,7 +10,6 @@ const ProfileScreen = () => {
 
   const handleLogout = async () => {
     logout();
-    router.replace('/sign-in');
   };
 
   return (

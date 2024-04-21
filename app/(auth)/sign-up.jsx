@@ -10,23 +10,22 @@ const SignUpScreen = () => {
 
     const [isSubmitting, setSubmitting] = useState(false);
     const [form, setForm] = useState({
-        username: "",
+        fullname: "",
         email: "",
         password: "",
     });
 
     const submit = async () => {
-        if (form.username === "" || form.email === "" || form.password === "") {
+        if (form.fullname === "" || form.email === "" || form.password === "") {
             Alert.alert("Error", "Please fill in all fields");
         }
 
         setSubmitting(true);
         try {
-            const result = await createUser(form.email, form.password, form.username);
-            setUser(result);
-            setIsLogged(true);
+            const result = await createUser(form.email, form.password, form.fullname);
 
-            router.replace("/home");
+
+            router.replace("/sign-in");
         } catch (error) {
             Alert.alert("Error", error.message);
         } finally {
@@ -54,10 +53,9 @@ const SignUpScreen = () => {
                     </Text>
 
                     <FormField
-                        title="Username"
-                        value={form.username}
-                        placeholder={"somethings cool.."}
-                        handleChangeText={(e) => setForm({ ...form, username: e })}
+                        title="Fullname"
+                        value={form.fullname}
+                        handleChangeText={(e) => setForm({ ...form, fullname: e })}
                         otherStyles="mt-10"
                     />
 

@@ -38,7 +38,7 @@ const VoucherDetailScreen = () => {
 
       <Image
         source={{ uri: voucher.thumbnail }}
-        className="w-full aspect-square rounded-lg mb-2"
+        className="w-full aspect-[3/2] rounded-lg mb-2"
         resizeMode="cover"
       />
 
