@@ -13,7 +13,7 @@ import {
   Loader,
 } from '../../../components';
 import { getQRsCustomer } from '../../../api/qr';
-import { dataSample } from '../../../assets/data';
+import { products } from '../../../assets/products';
 
 const HomeScreen = () => {
   // const { data, error, isLoading } = useQuery({
@@ -59,7 +59,7 @@ const HomeScreen = () => {
   return (
     <SafeAreaView className="bg-primary flex-1">
       <FlatList
-        data={dataSample}
+        data={products}
         keyExtractor={item => item.id}
         renderItem={({ item }) => (
           <Card

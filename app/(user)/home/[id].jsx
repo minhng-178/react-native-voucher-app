@@ -4,18 +4,16 @@ import { Stack, router, useLocalSearchParams } from 'expo-router';
 
 import { View, Text, Image } from 'react-native';
 
-import { dataSample } from '../../../assets/data';
 import { useCart } from '../../../providers/CartProvider';
 import { CustomButton } from '../../../components';
 import { calculateTimeLeft } from '../../../utils/countdown';
-import { useToast } from 'react-native-toast-notifications';
+import { products } from '../../../assets/products';
 
 const VoucherDetailScreen = () => {
   const { id } = useLocalSearchParams();
   const { addItem } = useCart();
-  const toast = useToast();
 
-  const voucher = dataSample.find(item => item.id === Number(id));
+  const voucher = products.find(item => item.id === Number(id));
 
   const [timeLeft, setTimeLeft] = useState(
     calculateTimeLeft(voucher.expiredDate),

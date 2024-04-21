@@ -22,7 +22,7 @@ export default function MenuStack() {
         ),
       }}
     >
-      <Stack.Screen name="index" options={{ title: 'Voucher' }} />
+      <Stack.Screen name="index" options={{ title: 'Orders' }} />
     </Stack>
   );
 }

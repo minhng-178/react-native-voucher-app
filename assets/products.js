@@ -1,4 +1,4 @@
-export const dataSample = [
+export const products = [
   {
     id: 1,
     title: 'Sale off maximum to 40%',

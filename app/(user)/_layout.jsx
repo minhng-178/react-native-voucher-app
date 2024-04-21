@@ -38,12 +38,12 @@ const TabLayout = () => {
         />
 
         <Tabs.Screen
-          name="list"
+          name="orders"
           options={{
-            title: 'Voucher',
+            title: 'Orders',
             headerShown: false,
             tabBarIcon: ({ color }) => (
-              <TabBarIcon name="qrcode" color={color} />
+              <TabBarIcon name="list" color={color} />
             ),
           }}
         />
