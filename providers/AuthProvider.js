@@ -1,12 +1,14 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createContext, useContext, useEffect, useState } from 'react';
+import { useToast } from 'react-native-toast-notifications';
 
 import { getUser } from '../api/user';
 import { getRoles } from '../api/role';
 
 const AuthContext = createContext();
-
 const AuthProvider = ({ children }) => {
+  const toast = useToast();
+
   const [user, setUser] = useState(null);
   const [tokens, setTokens] = useState(null);
   const [isCustomer, setIsCustomer] = useState(false);
@@ -22,15 +24,17 @@ const AuthProvider = ({ children }) => {
     await AsyncStorage.setItem('tokens', JSON.stringify(tokenData));
 
     await checkUserRole(userData);
+    toast.show('Logged In Successfully!', { type: 'success' });
   };
 
   const logout = async () => {
     await AsyncStorage.removeItem('user');
     await AsyncStorage.removeItem('tokens');
-    await AsyncStorage.clear();
+
     setUser(null);
     setTokens(null);
     setIsLogged(false);
+    toast.show('Logged out!', { type: 'success' });
   };
 
   const checkUserRole = async user => {

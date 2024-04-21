@@ -11,7 +11,6 @@ import { CustomButton, FormField } from '../../components';
 const SignInScreen = () => {
   const { updateAuth, isCustomer, isHost } = useAuth();
   const [isSubmitting, setSubmitting] = useState(false);
-
   const [form, setForm] = useState({
     email: '',
     password: '',

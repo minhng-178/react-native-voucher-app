@@ -1,29 +1,38 @@
 import { useState, useEffect } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Stack, useLocalSearchParams } from 'expo-router';
+import { Stack, router, useLocalSearchParams } from 'expo-router';
 
 import { View, Text, Image } from 'react-native';
 
 import { dataSample } from '../../../assets/data';
+import { useCart } from '../../../providers/CartProvider';
 import { CustomButton } from '../../../components';
 import { calculateTimeLeft } from '../../../utils/countdown';
+import { useToast } from 'react-native-toast-notifications';
 
 const VoucherDetailScreen = () => {
   const { id } = useLocalSearchParams();
+  const { addItem } = useCart();
+  const toast = useToast();
 
   const voucher = dataSample.find(item => item.id === Number(id));
 
   const [timeLeft, setTimeLeft] = useState(
-    calculateTimeLeft(voucher.exppiredDate),
+    calculateTimeLeft(voucher.expiredDate),
   );
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setTimeLeft(calculateTimeLeft(voucher.exppiredDate));
+      setTimeLeft(calculateTimeLeft(voucher.expiredDate));
     }, 1000);
-    // Clear timeout if the component is unmounted
     return () => clearTimeout(timer);
   });
+
+  const addToCart = () => {
+    addItem(voucher);
+    router.push('/cart');
+
+  };
 
   return (
     <View className="bg-primary flex-1 p-2">
@@ -36,7 +45,7 @@ const VoucherDetailScreen = () => {
       />
 
       <View className="bg-blue-100 h-14 flex-row px-2 items-center rounded-lg shadow-md overflow-hidden mb-2">
-        <Text className="text-lg">Expired time:</Text>
+        <Text className="text-lg">Expires time on:</Text>
         <View className="flex-row ml-2">
           <View className="bg-black rounded-md p-2 mr-1">
             <Text className="text-white text-md font-bold">
@@ -73,23 +82,9 @@ const VoucherDetailScreen = () => {
       </Text>
 
       <View className="flex-row items-center mb-2">
-        <FontAwesome size={16} name="star" color="tomato" />
-        <Text className="text-xs text-gray-500 font-pregular ml-2">
-          {voucher.review.toFixed(1) ?? '--'}
-        </Text>
-
-        <View
-          style={{
-            width: 1,
-            height: '100%',
-            backgroundColor: '#9B9B9B',
-            marginHorizontal: 10,
-          }}
-        />
-
         <FontAwesome size={16} name="shopping-cart" color="#9B9B9B" />
         <Text className="text-xs text-gray-500 font-pregular ml-2">
-          {voucher.total}
+          {voucher.buyed}
         </Text>
       </View>
 
@@ -102,14 +97,14 @@ const VoucherDetailScreen = () => {
       <View className="flex-row mb-2">
         <FontAwesome size={18} name="calendar" color="#9B9B9B" />
         <Text className="font-pbold text-md text-black-200 ml-2">
-          Expires on: {new Date(voucher.exppiredDate).toLocaleDateString()}
+          Expires on: {new Date(voucher.expiredDate).toLocaleDateString()}
         </Text>
       </View>
 
       <CustomButton
         title="Add to cart"
         containerStyles="mt-auto"
-        handlePress={() => console.log('pressed')}
+        handlePress={addToCart}
       />
     </View>
   );

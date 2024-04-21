@@ -2,8 +2,10 @@ import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ToastProvider } from 'react-native-toast-notifications';
 
 import AuthProvider from '../providers/AuthProvider';
+import CartProvider from '../providers/CartProvider';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -50,15 +52,19 @@ const RootLayout = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <Stack>
-          <Stack.Screen name="(host)" options={{ headerShown: false }} />
-          <Stack.Screen name="(user)" options={{ headerShown: false }} />
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="cart" options={{ presentation: 'modal' }} />
-        </Stack>
-      </AuthProvider>
+      <ToastProvider duration={2000} offsetTop={50} placement='top'>
+        <AuthProvider>
+          <CartProvider>
+            <Stack>
+              <Stack.Screen name="(host)" options={{ headerShown: false }} />
+              <Stack.Screen name="(user)" options={{ headerShown: false }} />
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              <Stack.Screen name="index" options={{ headerShown: false }} />
+              <Stack.Screen name="cart" options={{ presentation: 'modal' }} />
+            </Stack>
+          </CartProvider>
+        </AuthProvider>
+      </ToastProvider>
     </QueryClientProvider>
   );
 };

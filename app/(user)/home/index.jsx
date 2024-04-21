@@ -67,7 +67,7 @@ const HomeScreen = () => {
             title={item.title}
             thumbnail={item.thumbnail}
             price={item.price}
-            total={item.total}
+            buyed={item.buyed}
             creator={item.host.username}
             avatar={item.host.avatar}
           />
