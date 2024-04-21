@@ -8,12 +8,9 @@ import { useAuth } from '../providers/AuthProvider';
 import CustomButton from '../components/CustomButton';
 
 const WelcomeScreen = () => {
-  const { isLogged, isCustomer, isHost } = useAuth();
+  const { isLogged } = useAuth();
 
-  if (isLogged && isCustomer) return <Redirect href="/(user)/home" />;
-
-  if (isLogged && isHost) return <Redirect href="/(host)/home" />;
-
+  if (isLogged) return <Redirect href="/(user)/home" />;
 
   return (
     <SafeAreaView>

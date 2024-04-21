@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
+import { QueryClient, QueryClientProvider } from 'react-query';
+
 import AuthProvider from '../providers/AuthProvider';
 
 export {
@@ -44,16 +46,20 @@ const RootLayout = () => {
     return null;
   }
 
+  const queryClient = new QueryClient();
+
   return (
-    <AuthProvider>
-      <Stack>
-        <Stack.Screen name="(host)" options={{ headerShown: false }} />
-        <Stack.Screen name="(user)" options={{ headerShown: false }} />
-        <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="cart" options={{ presentation: 'modal' }} />
-      </Stack>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <Stack>
+          <Stack.Screen name="(host)" options={{ headerShown: false }} />
+          <Stack.Screen name="(user)" options={{ headerShown: false }} />
+          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="cart" options={{ presentation: 'modal' }} />
+        </Stack>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 };
 

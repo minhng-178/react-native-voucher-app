@@ -27,6 +27,7 @@ const AuthProvider = ({ children }) => {
   const logout = async () => {
     await AsyncStorage.removeItem('user');
     await AsyncStorage.removeItem('tokens');
+    await AsyncStorage.clear();
     setUser(null);
     setTokens(null);
     setIsLogged(false);
@@ -66,6 +67,7 @@ const AuthProvider = ({ children }) => {
     const loadAuthData = async () => {
       const storedUser = await AsyncStorage.getItem('user');
       const storedTokens = await AsyncStorage.getItem('tokens');
+
       if (storedUser && storedTokens) {
         setUser(JSON.parse(storedUser));
         setTokens(JSON.parse(storedTokens));

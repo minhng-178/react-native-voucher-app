@@ -8,6 +8,9 @@ export const refreshTokenPath = '/refresh';
 //? role
 export const rolesPath = '/roles';
 
+//? qr
+export const qrCustomerPath = '/qr/customer';
+
 //? user
 export const usersPath = id => {
   return `/user/${id}`;

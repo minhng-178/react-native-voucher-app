@@ -32,7 +32,7 @@ const processQueue = (error, token = null) => {
 // Add a request interceptor
 instance.interceptors.request.use(
   async config => {
-    const token = asyncStorage.getAccessToken();
+    const token = await asyncStorage.getAccessToken();
 
     if (token) {
       config.headers['Authorization'] = 'Bearer ' + token;
@@ -90,12 +90,12 @@ instance.interceptors.response.use(
             },
           )
           .then(async function (res) {
-            var data = res.data.data;
+            const tokens = res.data.tokens;
 
             // 1) put token to LocalStorage
-            await asyncStorage.setToken(data.accessToken);
-            if (data && data.refreshToken) {
-              await asyncStorage.setRefreshToken(data.refreshToken);
+            await asyncStorage.setToken(tokens.access.token);
+            if (tokens && tokens.refresh.token) {
+              await asyncStorage.setRefreshToken(tokens.refresh.token);
             }
 
             // 2) Change Authorization header
@@ -104,14 +104,14 @@ instance.interceptors.response.use(
             originalRequest.headers['Authorization'] =
               'Bearer ' + data.accessToken;
 
-            processQueue(null, data.accessToken);
+            processQueue(null, tokens.access.token);
 
             // 3) return originalRequest object with Axios
-            resolve(axiosClient.request(originalRequest));
+            resolve(instance.request(originalRequest));
           })
           .catch(function (err) {
-            var status = err.response.status;
-            var data = err.response.data;
+            const status = err.response.status;
+            const data = err.response.data;
 
             if (status === 404) {
               clearAuthToken();
@@ -139,8 +139,8 @@ const handleError = error => {
   return data;
 };
 
-const clearAuthToken = () => {
-  asyncStorage.clearToken();
+const clearAuthToken = async () => {
+  await asyncStorage.clearToken();
 };
 
 export default instance;
