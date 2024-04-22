@@ -53,7 +53,7 @@ const RootLayout = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ToastProvider duration={2000} offsetTop={50} placement='top'>
+      <ToastProvider duration={2000} offsetTop={50} placement="top">
         <AuthProvider>
           <CartProvider>
             <Stack>

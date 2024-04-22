@@ -42,9 +42,7 @@ const TabLayout = () => {
           options={{
             title: 'Orders',
             headerShown: false,
-            tabBarIcon: ({ color }) => (
-              <TabBarIcon name="list" color={color} />
-            ),
+            tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
           }}
         />
 
