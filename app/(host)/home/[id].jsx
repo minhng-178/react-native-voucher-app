@@ -1,17 +1,14 @@
 import { useState, useEffect } from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Stack, router, useLocalSearchParams } from 'expo-router';
+import { Link, Stack, useLocalSearchParams } from 'expo-router';
 
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, Pressable } from 'react-native';
 
-import { CustomButton } from '../../../components';
 import { products } from '../../../assets/products';
-import { useCart } from '../../../providers/CartProvider';
 import { calculateTimeLeft } from '../../../utils/countdown';
 
 const VoucherDetailScreen = () => {
   const { id } = useLocalSearchParams();
-  const { addItem } = useCart();
 
   const voucher = products.find(item => item.id === Number(id));
 
@@ -26,15 +23,29 @@ const VoucherDetailScreen = () => {
     return () => clearTimeout(timer);
   });
 
-  const addToCart = () => {
-    addItem(voucher);
-    router.push('/cart');
-
-  };
-
   return (
     <View className="bg-primary flex-1 p-2">
-      <Stack.Screen options={{ title: voucher.title }} />
+      <Stack.Screen
+        options={{
+          title: 'Menu',
+          headerRight: () => (
+            <Link href={`/(admin)/menu/create?id=${id}`} asChild>
+              <Pressable>
+                {({ pressed }) => (
+                  <FontAwesome
+                    name="pencil"
+                    size={25}
+                    color={'#FFA001'}
+                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                  />
+                )}
+              </Pressable>
+            </Link>
+          ),
+        }}
+      />
+
+      <Stack.Screen options={{ title: voucher?.title }} />
 
       <Image
         source={{ uri: voucher.thumbnail }}
@@ -98,12 +109,6 @@ const VoucherDetailScreen = () => {
           Expires on: {new Date(voucher.expiredDate).toLocaleDateString()}
         </Text>
       </View>
-
-      <CustomButton
-        title="Add to cart"
-        containerStyles="mt-auto"
-        handlePress={addToCart}
-      />
     </View>
   );
 };

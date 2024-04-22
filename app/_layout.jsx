@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import { useFonts } from 'expo-font';
 import { SplashScreen, Stack } from 'expo-router';
-import { QueryClient, QueryClientProvider } from 'react-query';
+
 import { ToastProvider } from 'react-native-toast-notifications';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import AuthProvider from '../providers/AuthProvider';
 import CartProvider from '../providers/CartProvider';

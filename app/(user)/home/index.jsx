@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { useQuery } from 'react-query';
+
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { FlatList, Image, RefreshControl, Text, View } from 'react-native';
+import { FlatList, RefreshControl, Text, View } from 'react-native';
 
 import {
   EmptyState,
@@ -12,7 +12,6 @@ import {
   FilterInput,
   Loader,
 } from '../../../components';
-import { getQRsCustomer } from '../../../api/qr';
 import { products } from '../../../assets/products';
 
 const HomeScreen = () => {
