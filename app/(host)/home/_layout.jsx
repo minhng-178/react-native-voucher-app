@@ -4,9 +4,9 @@ import { Pressable } from 'react-native';
 
 export default function HomeStack() {
   return (
-    <Stack
-      screenOptions={{
-        headerRight: () => (
+    <Stack>
+      <Stack.Screen name="index" options={{
+        title: 'Home', headerRight: () => (
           <Link href="/(host)/home/create" asChild>
             <Pressable>
               {({ pressed }) => (
@@ -20,9 +20,7 @@ export default function HomeStack() {
             </Pressable>
           </Link>
         ),
-      }}
-    >
-      <Stack.Screen name="index" options={{ title: 'Home' }} />
+      }} />
     </Stack>
   );
 }

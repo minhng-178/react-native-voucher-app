@@ -9,16 +9,12 @@ import { useAuth } from '../../providers/AuthProvider';
 import { CustomButton, FormField } from '../../components';
 
 const SignInScreen = () => {
-  const { updateAuth, isCustomer, isHost } = useAuth();
+  const { updateAuth, isCustomer, isHost, isLogged } = useAuth();
   const [isSubmitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
     email: '',
     password: '',
   });
-
-  if (isCustomer) return <Redirect href="/(user)/home" />;
-
-  if (isHost) return <Redirect href="/(host)/home" />;
 
   const submit = async () => {
     if (form.email === '' || form.password === '') {
@@ -28,19 +24,25 @@ const SignInScreen = () => {
     setSubmitting(true);
 
     try {
-      const [user, tokens] = await login(form.email, form.password);
+      const [user] = await login(form.email, form.password);
 
-      if (!user && !tokens) {
-        Alert.alert('Login falied!');
+      if (!user) {
+        Alert.alert('Error', 'Login falied!');
       }
 
-      updateAuth(user, tokens);
+      updateAuth(user);
     } catch (error) {
       Alert.alert('Error', error.message);
     } finally {
       setSubmitting(false);
     }
   };
+
+  if (isLogged) {
+    if (isCustomer) return <Redirect href="/(user)/home" />;
+
+    if (isHost) return <Redirect href="/(host)/home" />;
+  }
 
   return (
     <SafeAreaView className="bg-primary h-full">

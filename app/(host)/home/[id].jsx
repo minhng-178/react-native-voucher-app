@@ -29,7 +29,7 @@ const VoucherDetailScreen = () => {
         options={{
           title: 'Menu',
           headerRight: () => (
-            <Link href={`/(admin)/menu/create?id=${id}`} asChild>
+            <Link href={`/(host)/home/create?id=${id}`} asChild>
               <Pressable>
                 {({ pressed }) => (
                   <FontAwesome
@@ -49,7 +49,7 @@ const VoucherDetailScreen = () => {
 
       <Image
         source={{ uri: voucher.thumbnail }}
-        className="w-full aspect-[3/2] rounded-lg mb-2"
+        className="w-full aspect-[4/3] rounded-lg mb-2"
         resizeMode="cover"
       />
 

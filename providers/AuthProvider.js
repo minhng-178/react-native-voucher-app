@@ -11,29 +11,21 @@ const AuthProvider = ({ children }) => {
   const toast = useToast();
 
   const [user, setUser] = useState(null);
-  const [tokens, setTokens] = useState(null);
   const [isCustomer, setIsCustomer] = useState(false);
   const [isHost, setIsHost] = useState(false);
   const [isLogged, setIsLogged] = useState(false);
 
-  const updateAuth = async (userData, tokenData) => {
+  const updateAuth = async userData => {
     setUser(userData);
-    setTokens(tokenData);
     setIsLogged(true);
-
     await AsyncStorage.setItem('user', JSON.stringify(userData));
-    await AsyncStorage.setItem('tokens', JSON.stringify(tokenData));
-
     await checkUserRole(userData);
     toast.show('Logged In Successfully!', { type: 'success' });
   };
 
   const logout = async () => {
     await AsyncStorage.removeItem('user');
-    await AsyncStorage.removeItem('tokens');
-
     setUser(null);
-    setTokens(null);
     setIsLogged(false);
     router.push('/sign-in');
     toast.show('Logged out!', { type: 'success' });
@@ -87,7 +79,6 @@ const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
-        tokens,
         isLogged,
         isCustomer,
         isHost,
