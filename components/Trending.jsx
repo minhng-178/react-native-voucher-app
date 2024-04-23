@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import * as Animatable from 'react-native-animatable';
 import { FlatList, ImageBackground, TouchableOpacity } from 'react-native';
+import { images } from '../constants';
 
-import { useState } from 'react';
 
 const zoomIn = {
   0: {
@@ -25,7 +26,7 @@ const TrendingItem = ({ activeItem, item }) => {
   return (
     <Animatable.View
       className="mr-2"
-      animation={activeItem === item.$id ? zoomIn : zoomOut}
+      animation={activeItem === item._id ? zoomIn : zoomOut}
       duration={500}
     >
       <TouchableOpacity
@@ -35,7 +36,7 @@ const TrendingItem = ({ activeItem, item }) => {
       >
         <ImageBackground
           source={{
-            uri: item.thumbnail,
+            uri: item.image || images.defaultVoucher,
           }}
           className="w-52 h-72 rounded-[33px] my-4 overflow-hidden shadow-lg shadow-black/40"
           resizeMode="cover"
@@ -58,7 +59,7 @@ const Trending = ({ posts }) => {
     <FlatList
       data={posts}
       horizontal
-      keyExtractor={item => item.id}
+      keyExtractor={item => item._id}
       renderItem={({ item }) => (
         <TrendingItem activeItem={activeItem} item={item} />
       )}
