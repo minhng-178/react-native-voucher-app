@@ -38,7 +38,7 @@ const TabLayout = () => {
         />
 
         <Tabs.Screen
-          name="dashboard"
+          name="orders"
           options={{
             title: 'Dashboard',
             headerShown: false,

@@ -44,16 +44,16 @@ const AuthProvider = ({ children }) => {
       switch (userRole.name) {
         case 'admin':
           // handle admin role
-          break;
+          return 'admin';
         case 'staff':
           // handle staff role
-          break;
+          return 'staff';
         case 'customer':
           setIsCustomer(true);
-          break;
+          return 'customer';
         case 'host':
           setIsHost(true);
-          break;
+          return 'host';
         default:
           console.log('Unknown role');
       }
@@ -69,6 +69,7 @@ const AuthProvider = ({ children }) => {
       if (storedUser) {
         setUser(JSON.parse(storedUser));
         setIsLogged(true);
+        await checkUserRole(JSON.parse(storedUser));
       }
     };
     loadAuthData();

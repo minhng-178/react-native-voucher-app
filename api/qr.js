@@ -1,5 +1,5 @@
 import axiosInstance from './axiosInstance';
-import { qrCustomerPath, qrIdPath, qrPath } from './endpoint';
+import { qrCustomerPath, qrHostCreatePath, qrIdPath, qrPath } from './endpoint';
 
 export const getQRs = async () => {
   try {
@@ -32,6 +32,42 @@ export const getQRsCustomer = async () => {
   try {
     const response = await axiosInstance.get(qrCustomerPath);
     if (response.status === 201) {
+      return response.data;
+    } else {
+      console.log(response.data.message);
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const createQR = async form => {
+  const data = {
+    name: form.name,
+    price: Number(form.price),
+    image_url: form.image,
+    expire_date: form.expiredDate,
+    amount: form.amount,
+    discounts: [
+      {
+        discount: Number(form.discounts.discount),
+        currency: form.discounts.currency,
+        min_price: Number(form.discounts.min_price),
+      },
+    ],
+    details: [
+      {
+        detail: form.details.detail,
+        step: form.details.step,
+      },
+    ],
+  };
+  console.log(data);
+
+  try {
+    const response = await axiosInstance.post(qrHostCreatePath, data);
+    if (response.status === 201) {
+      console.log('Create success', response.data);
       return response.data;
     } else {
       console.log(response.data.message);

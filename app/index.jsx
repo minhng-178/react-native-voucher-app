@@ -11,6 +11,7 @@ import CustomButton from '../components/CustomButton';
 
 const WelcomeScreen = () => {
   const { isLogged } = useAuth();
+
   const [firstLaunch, setFirstLaunch] = useState(null);
 
   useEffect(() => {
@@ -27,7 +28,7 @@ const WelcomeScreen = () => {
   if (firstLaunch === null) {
     return null;
   } else if (firstLaunch === true) {
-    if (isLogged) return <Redirect href="/(user)/home" />;
+    // if (isLogged) return <Redirect href="/(user)/home" />;
 
     return (
       <SafeAreaView>
@@ -80,7 +81,7 @@ const WelcomeScreen = () => {
       </SafeAreaView>
     );
   } else {
-    return <Redirect href="/(user)/home" />;
+    return <Redirect href="/(host)/home" />;
   }
 };
 
