@@ -14,13 +14,13 @@ const CartListItem = ({ cartItem }) => {
   return (
     <View className="bg-white rounded-lg p-1 flex-row items-center">
       <Image
-        source={{ uri: cartItem.product.thumbnail }}
+        source={{ uri: cartItem.product.image_url }}
         className="w-16 aspect-square self-center mr-2 rounded-lg"
         resizeMode="cover"
       />
       <View className="flex-1">
         <Text className="font-medium text-lg mb-1" numberOfLines={1}>
-          {cartItem.product.title}
+          {cartItem.product.name}
         </Text>
         <View className="flex-row gap-1">
           <Text className="text-red-500 font-bold">

@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import * as ImagePicker from 'expo-image-picker';
+import { useToast } from 'react-native-toast-notifications';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -11,18 +13,23 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  Platform,
   Button,
 } from 'react-native';
 
 import { icons } from '../../../constants';
-import { CustomButton, FormField } from '../../../components';
-import { products } from '../../../assets/products';
 import { uploadImage } from '../../../api/upload';
-import { createQR } from '../../../api/qr';
+import { createQR, getQR } from '../../../api/qr';
+import { products } from '../../../assets/products';
+import { CustomButton, FormField } from '../../../components';
 
 const Create = () => {
   const { id } = useLocalSearchParams();
+  const { data: product, isLoading } = useQuery({
+    queryKey: ['qr', id],
+    queryFn: () => getQR(id),
+  });
+
+  const toast = useToast()
   const [uploading, setUploading] = useState(false);
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState('date');
@@ -46,15 +53,17 @@ const Create = () => {
 
   const isUpdating = !!id;
 
-  const updatingProduct = products.find(product => product.id === Number(id));
+  const updatingProduct = product?.data || {};
+
+  console.log(updatingProduct);
 
   useEffect(() => {
     if (updatingProduct) {
       setForm({
         title: updatingProduct.name,
-        price: updatingProduct.price.toString(),
-        image: updatingProduct.image,
-        expiredDate: new Date(updatingProduct.expiredDate),
+        // price: updatingProduct.price.toString(),
+        // image: updatingProduct.image,
+        // expiredDate: new Date(updatingProduct.expiredDate),
       });
     }
   }, [updatingProduct]);
@@ -119,9 +128,10 @@ const Create = () => {
 
     setUploading(true);
     try {
-      const response = await createQR(form);
+      await createQR(form);
+      toast.show('Create new voucher successful!', { type: 'success' })
 
-      // router.push('/home');
+      router.push('/(host)/home');
     } catch (error) {
       Alert.alert('Error', error.message);
     } finally {
@@ -140,6 +150,8 @@ const Create = () => {
           step: '',
         },
       });
+
+      setUploading(false);
     }
   };
 

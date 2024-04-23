@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Link, Stack, useLocalSearchParams } from 'expo-router';
+import { Stack, router, useLocalSearchParams } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-import { View, Text, Image, Pressable } from 'react-native';
+import { View, Text, Image } from 'react-native';
 
 import { getQR } from '../../../api/qr';
-import { Loader } from '../../../components';
 import { images } from '../../../constants';
+import { useCart } from '../../../providers/CartProvider';
+import { CustomButton, Loader } from '../../../components';
 import { calculateTimeLeft } from '../../../utils/countdown';
 
 const VoucherDetailScreen = () => {
   const { id } = useLocalSearchParams();
+  const { addItem } = useCart();
 
   const { data: product, isLoading } = useQuery({
     queryKey: ['qr', id],
@@ -34,12 +36,18 @@ const VoucherDetailScreen = () => {
     return <Loader isLoading={isLoading} />;
   }
 
+  const addToCart = () => {
+    addItem(product.data);
+    router.push('/cart');
+
+  };
+
   return (
     <View className="bg-primary flex-1 p-2">
 
       <Stack.Screen options={{ title: product.data.name }} />
       <Image
-        source={{ uri: product.data.image || images.defaultVoucher }}
+        source={{ uri: product.data.image_url || images.defaultVoucher }}
         className="w-full aspect-[4/3] rounded-lg mb-2"
         resizeMode="cover"
       />
@@ -91,6 +99,13 @@ const VoucherDetailScreen = () => {
           Expires on: {new Date(product.data.expire_date).toLocaleDateString()}
         </Text>
       </View>
+
+
+      <CustomButton
+        title="Add to cart"
+        containerStyles="mt-auto"
+        handlePress={addToCart}
+      />
     </View>
   );
 };

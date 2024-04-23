@@ -81,7 +81,7 @@ const WelcomeScreen = () => {
       </SafeAreaView>
     );
   } else {
-    return <Redirect href="/(host)/home" />;
+    return <Redirect href="/(user)/home" />;
   }
 };
 

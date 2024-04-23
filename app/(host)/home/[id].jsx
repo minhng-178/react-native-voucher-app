@@ -57,7 +57,7 @@ const VoucherDetailScreen = () => {
       />
       <Stack.Screen options={{ title: product.data.name }} />
       <Image
-        source={{ uri: product.data.image || images.defaultVoucher }}
+        source={{ uri: product.data.image_url || images.defaultVoucher }}
         className="w-full aspect-[4/3] rounded-lg mb-2"
         resizeMode="cover"
       />

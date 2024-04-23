@@ -52,7 +52,7 @@ const HomeScreen = () => {
           <Card
             id={item._id}
             name={item.name}
-            image={item.image}
+            image={item.image_url}
             price={item.price}
             amount={item.amount}
             expiredDate={item.expire_date}

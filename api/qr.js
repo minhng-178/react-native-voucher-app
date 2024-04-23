@@ -48,6 +48,7 @@ export const createQR = async form => {
     image_url: form.image,
     expire_date: form.expiredDate,
     amount: form.amount,
+    categories: [],
     discounts: [
       {
         discount: Number(form.discounts.discount),
@@ -62,7 +63,6 @@ export const createQR = async form => {
       },
     ],
   };
-  console.log(data);
 
   try {
     const response = await axiosInstance.post(qrHostCreatePath, data);

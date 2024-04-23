@@ -16,6 +16,9 @@ export const qrIdPath = id => {
   return `${qrPath}/${id}`;
 };
 
+//? cate
+export const catePath = '/categories';
+
 //? user
 export const usersPath = id => {
   return `/user/${id}`;

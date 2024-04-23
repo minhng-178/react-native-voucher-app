@@ -26,7 +26,7 @@ const CartProvider = ({ children }) => {
   }, []);
 
   const addItem = async product => {
-    const existingItem = items.find(i => i.product_id === product.id);
+    const existingItem = items.find(i => i.product_id === product._id);
 
     if (existingItem) {
       updateQuantity(existingItem.id, 1);
@@ -36,7 +36,7 @@ const CartProvider = ({ children }) => {
     const newCartItem = {
       id: randomUUID(),
       product,
-      product_id: product.id,
+      product_id: product._id,
       quantity: 1,
     };
 

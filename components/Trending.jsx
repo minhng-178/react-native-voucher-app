@@ -37,7 +37,7 @@ const TrendingItem = ({ activeItem, item }) => {
       >
         <ImageBackground
           source={{
-            uri: item.image || images.defaultVoucher,
+            uri: item.image_url || images.defaultVoucher,
           }}
           className="w-52 h-72 rounded-[33px] my-4 overflow-hidden shadow-lg shadow-black/40"
           resizeMode="cover"
