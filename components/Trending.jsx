@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import * as Animatable from 'react-native-animatable';
 import { FlatList, ImageBackground, TouchableOpacity } from 'react-native';
-import { images } from '../constants';
 
+import { images } from '../constants';
 
 const zoomIn = {
   0: {
@@ -23,6 +23,7 @@ const zoomOut = {
 };
 
 const TrendingItem = ({ activeItem, item }) => {
+
   return (
     <Animatable.View
       className="mr-2"

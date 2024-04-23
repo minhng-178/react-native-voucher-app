@@ -35,11 +35,13 @@ const HomeScreen = () => {
     setRefreshing(false);
   };
 
-  const filterProduct = products?.data.filter(product => product.status === 1);
+  const filterProduct = products?.data ? products.data.filter(product => product.status === 1) : [];
 
   const latestProduct = products?.data
-    .filter(product => product.status === 1)
-    .slice(0, 3);
+    ? products.data
+      .filter(product => product.status === 1)
+      .slice(0, 3)
+    : [];
 
   return (
     <SafeAreaView className="bg-primary flex-1">
