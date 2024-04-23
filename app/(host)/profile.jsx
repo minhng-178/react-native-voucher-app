@@ -1,21 +1,21 @@
 import { router } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { View, Image, FlatList, TouchableOpacity } from 'react-native';
 
-import { icons } from '../../constants';
+import { images } from '../../constants';
+import { useAuth } from '../../providers/AuthProvider';
 import { EmptyState, InfoBox, Card } from '../../components';
 
-const Profile = () => {
-  const user = [
-    {
-      avatar:
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/User-avatar.svg/2048px-User-avatar.svg.png',
-      username: 'John Doe',
-    },
-  ];
+const ProfileScreen = () => {
+  const { user, logout } = useAuth();
+
+  const handleLogout = async () => {
+    logout();
+    router.replace('/sign-in');
+  };
 
   return (
-    <SafeAreaView className="bg-primary h-full">
+    <View className="bg-primary">
       <FlatList
         data={[]}
         keyExtractor={item => item.$id}
@@ -30,35 +30,33 @@ const Profile = () => {
         )}
         ListEmptyComponent={() => (
           <EmptyState
-            title="No Videos Found"
-            subtitle="No videos found for this profile"
+            title="No Voucher Found"
+            subtitle="No voucher found for this profile"
           />
         )}
         ListHeaderComponent={() => (
-          <View className="w-full flex justify-center items-center mt-6 mb-12 px-4">
+          <View className="w-full flex justify-center items-center mt-2 mb-12 px-4">
             <TouchableOpacity
-              onPress={() => {}}
+              onPress={handleLogout}
               className="flex w-full items-end mb-10"
             >
-              <Image
-                source={icons.logout}
-                resizeMode="contain"
-                className="w-6 h-6"
-              />
+              <FontAwesome name="sign-out" size={24} color="#FF8E01" />
             </TouchableOpacity>
 
             <View className="w-16 h-16 border border-secondary rounded-lg flex justify-center items-center">
               <Image
-                source={{ uri: user?.avatar }}
+                source={{
+                  uri: user?.avatar || images.defaultAvatar,
+                }}
                 className="w-[90%] h-[90%] rounded-lg"
                 resizeMode="cover"
               />
             </View>
 
             <InfoBox
-              title={user?.username}
+              title={user?.email}
               containerStyles="mt-5"
-              titleStyles="text-lg"
+              titleStyles="text-lg text-black"
             />
 
             <View className="mt-5 flex flex-row">
@@ -77,8 +75,8 @@ const Profile = () => {
           </View>
         )}
       />
-    </SafeAreaView>
+    </View>
   );
 };
 
-export default Profile;
+export default ProfileScreen;

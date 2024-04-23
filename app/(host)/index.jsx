@@ -1,5 +1,9 @@
-import { Redirect } from "expo-router";
+import { Redirect } from 'expo-router';
+import { useAuth } from '../../providers/AuthProvider';
 
 export default function TabIndex() {
-    return <Redirect href={"/(host)/home/"} />;
+  const { isHost } = useAuth();
+
+  if (isHost) return <Redirect href="/(host)/home" />;
+  else return <Redirect href="/(user)/home" />;
 }

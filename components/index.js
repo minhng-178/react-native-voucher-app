@@ -7,6 +7,8 @@ import Trending from './Trending';
 import EmptyState from './EmptyState';
 import SearchInput from './SearchInput';
 import FilterInput from './FilterInput';
+import OrderListItem from './OrderListItem';
+import OrderItemListItem from './OrderItemListItem';
 
 export {
   Card,
@@ -18,4 +20,6 @@ export {
   EmptyState,
   SearchInput,
   FilterInput,
+  OrderListItem,
+  OrderItemListItem,
 };

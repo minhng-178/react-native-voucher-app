@@ -31,13 +31,13 @@ const TrendingItem = ({ activeItem, item }) => {
       <TouchableOpacity
         className="relative flex justify-center items-center"
         activeOpacity={0.7}
-        onPress={() => {}}
+        onPress={() => { }}
       >
         <ImageBackground
           source={{
             uri: item.thumbnail,
           }}
-          className="w-52 h-72 rounded-[33px] my-5 overflow-hidden shadow-lg shadow-black/40"
+          className="w-52 h-72 rounded-[33px] my-4 overflow-hidden shadow-lg shadow-black/40"
           resizeMode="cover"
         />
       </TouchableOpacity>

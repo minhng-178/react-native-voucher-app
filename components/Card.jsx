@@ -1,59 +1,46 @@
 import { useState } from 'react';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { Link, useSegments } from 'expo-router';
 
-import { icons } from '../constants';
+const Card = ({ id, title, creator, thumbnail, price, buyed }) => {
+  const segments = useSegments();
 
-const Card = ({ title, creator, avatar, thumbnail }) => {
   return (
-    <View className="flex flex-col items-center px-4 mb-14">
-      <View className="flex flex-row gap-3 items-start">
-        <View className="flex justify-center items-center flex-row flex-1">
-          <View className="w-[46px] h-[46px] rounded-lg border border-secondary flex justify-center items-center p-0.5">
-            <Image
-              source={{ uri: avatar }}
-              className="w-full h-full rounded-lg"
-              resizeMode="cover"
-            />
-          </View>
-
-          <View className="flex justify-center flex-1 ml-3 gap-y-1">
-            <Text
-              className="font-psemibold text-sm text-black-100"
-              numberOfLines={1}
-            >
-              {title}
-            </Text>
-            <Text
-              className="text-xs text-black-100 font-pregular"
-              numberOfLines={1}
-            >
-              {creator}
-            </Text>
-          </View>
-
-          <View className="pt-2">
-            <Image
-              source={icons.menu}
-              className="w-5 h-5"
-              resizeMode="contain"
-            />
-          </View>
-        </View>
-      </View>
-
+    <Link href={`/${segments[0]}/home/${id}`} asChild>
       <TouchableOpacity
         activeOpacity={0.7}
-        onPress={() => setPlay(true)}
-        className="w-full h-60 rounded-xl mt-3 relative flex justify-center items-center"
+        onPress={() => { }}
+        className="flex-row items-start mx-2 mb-6 bg-white border border-gray-200 rounded-lg shadow md:max-w-xl hover:bg-gray-100"
       >
         <Image
           source={{ uri: thumbnail }}
-          className="w-full h-full rounded-xl mt-3"
+          className="flex-1 w-full h-full rounded-lg"
           resizeMode="cover"
         />
+
+        <View className="flex-col w-52 justify-between leading-normal ml-3 my-3 gap-y-1 py-2">
+          <Text className="font-plight text-gray-70">{creator}</Text>
+
+          <Text
+            className="font-psemibold text-sm text-black mb-2"
+            numberOfLines={1}
+          >
+            {title}
+          </Text>
+
+          <View className="flex-row items-center mb-2">
+            <FontAwesome size={16} name="shopping-cart" color="#9B9B9B" />
+            <Text className="text-xs text-gray-500 font-pregular ml-2">
+              {buyed}
+            </Text>
+          </View>
+
+          <Text className="text-sm font-pbold">{price}đ</Text>
+        </View>
       </TouchableOpacity>
-    </View>
+    </Link>
   );
 };
 

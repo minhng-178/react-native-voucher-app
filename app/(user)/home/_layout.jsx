@@ -20,9 +20,10 @@ export default function HomeStack() {
             </Pressable>
           </Link>
         ),
+
       }}
     >
       <Stack.Screen name="index" options={{ title: 'Home' }} />
-    </Stack>
+    </Stack >
   );
 }
