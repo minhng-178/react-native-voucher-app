@@ -5,7 +5,7 @@ import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { Link, useSegments } from 'expo-router';
 import { images } from '../constants';
 
-const Card = ({ id, name, image, price, amount }) => {
+const Card = ({ id, name, image, price, amount, hostName }) => {
   const segments = useSegments();
 
   return (
@@ -21,7 +21,7 @@ const Card = ({ id, name, image, price, amount }) => {
         />
 
         <View className="flex-col w-52 justify-between leading-normal ml-3 my-3 gap-y-1 py-2">
-          <Text className="font-plight text-gray-70">{amount}</Text>
+          <Text className="font-plight text-gray-70">{hostName}</Text>
 
           <Text
             className="font-psemibold text-sm text-black mb-2"
