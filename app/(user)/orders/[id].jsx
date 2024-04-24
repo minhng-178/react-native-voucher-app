@@ -20,13 +20,12 @@ export default function OrderDetailsScreen() {
   const handlePressCheckout = async () => {
     await handleCheckout(order)
   }
-
   return (
     <View style={{ padding: 10, gap: 20, flex: 1 }}>
       <Stack.Screen options={{ title: `Order #${id}` }} />
 
       <FlatList
-        data={order}
+        data={[order]}
         renderItem={({ item }) => <OrderItemListItem item={item} />}
         contentContainerStyle={{ gap: 10 }}
         ListHeaderComponent={() => <OrderListItem order={order} />}

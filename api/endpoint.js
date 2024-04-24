@@ -46,3 +46,8 @@ export const orderUserPath = id => {
 //? payment
 
 export const paymentPath = '/payments';
+
+//? code
+export const qrCodePath = id => {
+  return `user/${id}/qr_code/`;
+};

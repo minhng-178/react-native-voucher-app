@@ -47,12 +47,21 @@ const TabLayout = () => {
         />
 
         <Tabs.Screen
+          name="vouchers"
+          options={{
+            title: 'Vouchers',
+            tabBarIcon: ({ color }) => <TabBarIcon name="qrcode" color={color} />,
+          }}
+        />
+
+        <Tabs.Screen
           name="profile"
           options={{
             title: 'Profile',
             tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
           }}
         />
+
       </Tabs>
 
       {/* <Loader isLoading={loading} /> */}

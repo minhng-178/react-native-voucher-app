@@ -16,23 +16,23 @@ const Cart = () => {
   const { items, total, clearCart } = useCart();
   const [uploading, setUploading] = useState(false);
 
-  if (!user) {
-    Alert.alert('Please logged in  to access this page');
-    router.push('/sign-in');
-    return;
-  }
-
-  const dataOrder = {
-    name_recieve: user.fullName,
-    note: '',
-    email_recieve: user.email,
-    qrs: items.map(item => ({
-      qr_id: item.product._id,
-      amount: item.quantity,
-    })),
-  };
-
   const handleSubmitOrder = async () => {
+    if (!user) {
+      Alert.alert('Please logged in to access actions');
+      router.push('/sign-in');
+      return;
+    }
+
+    const dataOrder = {
+      name_recieve: user.fullName,
+      note: '',
+      email_recieve: user.email,
+      qrs: items.map(item => ({
+        qr_id: item.product._id,
+        amount: item.quantity,
+      })),
+    };
+
     if (
       dataOrder.name_recieve === '' ||
       dataOrder.email_recieve === '' ||
@@ -42,7 +42,10 @@ const Cart = () => {
     }
 
     if (total <= 10000) {
-      return Alert.alert('Error', 'Total in the cart must be larger than 10000VND');
+      return Alert.alert(
+        'Error',
+        'Total in the cart must be larger than 10000VND',
+      );
     }
 
     setUploading(true);

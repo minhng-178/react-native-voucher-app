@@ -9,9 +9,7 @@ export default function PaymentScreen() {
   const { paymentUrl } = usePaymentUrl();
 
   const handleNavigationChange = navState => {
-    console.log(navState);
     if (navState.url.includes('https://www.google.com/')) {
-      console.log(123);
       router.push('/success');
     }
   };
