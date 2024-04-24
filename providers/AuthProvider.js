@@ -19,8 +19,8 @@ const AuthProvider = ({ children }) => {
   const updateAuth = async userData => {
     setUser(userData);
     setIsLogged(true);
+    checkUserRole(userData);
     await AsyncStorage.setItem('user', JSON.stringify(userData));
-    await checkUserRole(userData);
     toast.show('Logged In Successfully!', { type: 'success' });
   };
 
@@ -32,33 +32,13 @@ const AuthProvider = ({ children }) => {
     toast.show('Logged out!', { type: 'success' });
   };
 
-  const checkUserRole = async user => {
-    const currentUser = await getUser(user._id);
-    const roles = await getRoles();
+  const checkUserRole = user => {
+    if (!user) return;
 
-    const userRole = roles.data.find(
-      role => role._id === currentUser.data.role_id,
-    );
-
-    if (userRole) {
-      switch (userRole.name) {
-        case 'admin':
-          // handle admin role
-          return 'admin';
-        case 'staff':
-          // handle staff role
-          return 'staff';
-        case 'customer':
-          setIsCustomer(true);
-          return 'customer';
-        case 'host':
-          setIsHost(true);
-          return 'host';
-        default:
-          console.log('Unknown role');
-      }
-    } else {
-      console.log('No role found for this user');
+    if (user.role === 'host') {
+      setIsHost(true);
+    } else if (user.role === 'customer') {
+      setIsCustomer(true);
     }
   };
 
@@ -69,7 +49,6 @@ const AuthProvider = ({ children }) => {
       if (storedUser) {
         setUser(JSON.parse(storedUser));
         setIsLogged(true);
-        await checkUserRole(JSON.parse(storedUser));
       }
     };
     loadAuthData();
