@@ -4,10 +4,6 @@ import { EmptyState, OrderListItem } from '../../../../components';
 import { useSegments } from 'expo-router';
 
 const OrdersScreen = () => {
-  const segments = useSegments();
-
-  console.log(segments);
-
   return (
     <FlatList
       data={orders}

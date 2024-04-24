@@ -25,12 +25,15 @@ const VoucherDetailScreen = () => {
   useEffect(() => {
     if (!isLoading && product) {
       setTimeLeft(calculateTimeLeft(product.data.expire_date));
-      const timer = setTimeout(() => {
+
+      const timer = setInterval(() => {
         setTimeLeft(calculateTimeLeft(product.data.expire_date));
       }, 1000);
-      return () => clearTimeout(timer);
+
+      return () => clearInterval(timer);
     }
-  }, [isLoading, product]);
+  }, [product, isLoading]);
+
 
   if (isLoading) {
     return <Loader isLoading={isLoading} />;
@@ -79,17 +82,29 @@ const VoucherDetailScreen = () => {
           </View>
         </View>
       </View>
-      <Text className="font-pregular text-sm mb-2">{product.data.name}</Text>
+      <Text className="font-pregular text-sm mb-2">{product?.data?.host_id?.fullName}</Text>
       <Text className="font-psemibold text-lg mb-2" numberOfLines={2}>
         {product.data.name}
       </Text>
+      {product.data.discount.map((item, index) => (
+        <Text key={index} className="font-pregular text-sm mb-2">
+          Discount: {item.discount}%
+        </Text>
+      ))}
       <View className="flex-row items-center mb-2">
         <FontAwesome size={16} name="shopping-cart" color="#9B9B9B" />
         <Text className="text-xs text-gray-500 font-pregular ml-2">
-          {product.data.name}
+          {product.data.amount}
         </Text>
       </View>
-      <Text className="text-sm font-pbold">{product.data.price}đ</Text>
+      <Text className="text-lg font-pbold text-secondary-200">{product.data.price}đ</Text>
+
+      {product.data.detail.map((item, index) => (
+        <Text key={index} className="font-pregular text-sm mb-2" >
+          Detail: {item.details}
+        </Text>
+      ))}
+
       <View
         style={{ height: 1, backgroundColor: '#9B9B9B', marginVertical: 10 }}
       />

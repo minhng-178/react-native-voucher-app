@@ -12,6 +12,11 @@ export const rolesPath = '/roles';
 export const qrPath = '/qr';
 export const qrCustomerPath = '/qr/customer';
 export const qrHostCreatePath = '/host/qr';
+
+export const qrHostUpdatePath = id => {
+  return `${qrHostCreatePath}/${id}`;
+};
+
 export const qrIdPath = id => {
   return `${qrPath}/${id}`;
 };

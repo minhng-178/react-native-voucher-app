@@ -27,6 +27,7 @@ const WelcomeScreen = () => {
     fetchUser();
   }, []);
 
+
   if (userRole === 'host') {
     return <Redirect href="/(host)/home" />;
   } else if (userRole === 'customer') {

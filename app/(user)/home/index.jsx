@@ -17,7 +17,7 @@ import {
 import { getQRs } from '../../../api/qr';
 
 const HomeScreen = () => {
-  const { data: products, error } = useQuery({
+  const { data: products, error, refetch } = useQuery({
     queryKey: ['qrs'],
     queryFn: getQRs,
   });
@@ -31,17 +31,14 @@ const HomeScreen = () => {
   const [refreshing, setRefreshing] = useState(false);
 
   const onRefresh = async () => {
-    // setRefreshing(true);
+    setRefreshing(true);
+    await refetch();
     setRefreshing(false);
   };
 
   const filterProduct = products?.data ? products.data.filter(product => product.status === 1) : [];
 
-  const latestProduct = products?.data
-    ? products.data
-      .filter(product => product.status === 1)
-      .slice(0, 3)
-    : [];
+  const latestProduct = filterProduct.slice(0, 3);
 
   return (
     <SafeAreaView className="bg-primary flex-1">
@@ -56,6 +53,7 @@ const HomeScreen = () => {
             price={item.price}
             amount={item.amount}
             expiredDate={item.expire_date}
+            hostName={item.host_id ? item.host_id.fullName : 'Unknown'}
           />
         )}
         ListHeaderComponent={() => (

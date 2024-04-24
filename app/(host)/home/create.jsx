@@ -18,11 +18,17 @@ import {
 
 import { icons } from '../../../constants';
 import { uploadImage } from '../../../api/upload';
-import { createQR, getQR } from '../../../api/qr';
-import { products } from '../../../assets/products';
-import { CustomButton, FormField } from '../../../components';
+import { createQR, getQR, updateQR } from '../../../api/qr';
+import { CustomButton, FormField, Loader } from '../../../components';
+import { getCates } from '../../../api/cateQR';
 
 const Create = () => {
+  const { data } = useQuery({
+    queryKey: ['cates'],
+    queryFn: getCates,
+  });
+
+
   const { id } = useLocalSearchParams();
   const toast = useToast();
   const [uploading, setUploading] = useState(false);
@@ -53,25 +59,40 @@ const Create = () => {
   const isUpdating = !!id;
   let updatingProduct = {};
 
-  // if (isUpdating) {
-  //   const { data: product, isLoading } = useQuery({
-  //     queryKey: ['qr', id],
-  //     queryFn: () => getQR(id),
-  //   });
+  if (isUpdating) {
+    const { data: product, isLoading } = useQuery({
+      queryKey: ['qr', id],
+      queryFn: () => getQR(id),
+    });
 
-  //   updatingProduct = product?.data || {};
-  // }
+    if (isLoading) {
+      return <Loader isLoading={isLoading} />;
+    }
 
-  // useEffect(() => {
-  //   if (updatingProduct) {
-  //     setForm({
-  //       title: updatingProduct.name,
-  //       // price: updatingProduct.price.toString(),
-  //       // image: updatingProduct.image,
-  //       // expiredDate: new Date(updatingProduct.expiredDate),
-  //     });
-  //   }
-  // }, [updatingProduct]);
+    updatingProduct = product?.data;
+
+    if (updatingProduct) {
+      useEffect(() => {
+        setForm({
+          ...form,
+          name: updatingProduct.name,
+          price: updatingProduct.price.toString(),
+          image: updatingProduct.image_url,
+          amount: updatingProduct.amount.toString(),
+          expiredDate: new Date(updatingProduct.expire_date),
+          discounts: updatingProduct.discount.map(dis => ({
+            discount: dis.discount.toString(),
+            currency: dis.currency,
+            min_price: dis.min_price.toString(),
+          })),
+          details: updatingProduct.detail.map(det => ({
+            detail: det.details || 'Many steps',
+            step: det.step.toString(),
+          })),
+        });
+      }, [updatingProduct]);
+    }
+  }
 
   const onChange = selectedDate => {
     const currentDate = new Date(selectedDate.nativeEvent.timestamp);
@@ -80,7 +101,9 @@ const Create = () => {
     today.setHours(0, 0, 0, 0);
 
     if (currentDate <= today) {
-      return Alert.alert('Expiration date must be in the future');
+      Alert.alert('Expiration date must be in the future');
+      setShow(false);
+      return;
     }
 
     setShow(false);
@@ -133,32 +156,62 @@ const Create = () => {
 
     setUploading(true);
     try {
-      await createQR(form);
-      toast.show('Create new voucher successful!', { type: 'success' });
-
-      router.push('/(host)/home');
+      if (isUpdating) {
+        await updateQR(form, updatingProduct._id);
+        toast.show('Update voucher successful!', { type: 'success' });
+        router.navigate(`/(host)/home/${id}`)
+      } else {
+        await createQR(form);
+        toast.show('Create new voucher successful!', { type: 'success' });
+        router.push('/(host)/home');
+      }
     } catch (error) {
       Alert.alert('Error', error.message);
     } finally {
-      setForm({
-        name: '',
-        image: null,
-        expiredDate: new Date(),
-        price: '',
-        discounts: {
-          discount: '',
-          currency: '',
-          min_price: '',
-        },
-        details: {
-          detail: '',
-          step: '',
-        },
-      });
-
-      setUploading(false);
+      if (isUpdating) {
+        setForm({
+          ...form,
+          name: updatingProduct.name,
+          price: updatingProduct.price.toString(),
+          image: updatingProduct.image_url,
+          amount: updatingProduct.amount.toString(),
+          expiredDate: new Date(updatingProduct.expire_date),
+          discounts: updatingProduct.discount.map(dis => ({
+            discount: dis.discount.toString(),
+            currency: dis.currency,
+            min_price: dis.min_price.toString(),
+          })),
+          details: updatingProduct.detail.map(det => ({
+            detail: det.details || 'Many steps',
+            step: det.step.toString(),
+          })),
+        });
+        setUploading(false);
+      } else {
+        setForm({
+          name: '',
+          price: '',
+          image: null,
+          amount: '',
+          expiredDate: new Date(),
+          discounts: [
+            {
+              discount: '',
+              currency: '',
+              min_price: '',
+            },
+          ],
+          details: [
+            {
+              detail: '',
+              step: '',
+            },
+          ],
+        });
+        setUploading(false);
+      }
     }
-  };
+  }
 
   return (
     <SafeAreaView className="bg-primary h-full">
@@ -197,11 +250,11 @@ const Create = () => {
 
         <FormField
           title="Discount"
-          value={form.discounts.discount}
+          value={form.discounts[0].discount}
           handleChangeText={e =>
             setForm({
               ...form,
-              discounts: { ...form.discounts, discount: e },
+              discounts: [{ ...form.discounts[0], discount: e }],
             })
           }
           keyboardType="numeric"
@@ -210,21 +263,24 @@ const Create = () => {
 
         <FormField
           title="Currency"
-          value={form.discounts.currency}
+          value={form.discounts[0].currency}
           placeholder={'VND'}
           handleChangeText={e =>
-            setForm({ ...form, discounts: { ...form.discounts, currency: e } })
+            setForm({
+              ...form,
+              discounts: [{ ...form.discounts[0], currency: e }],
+            })
           }
           otherStyles="mt-5"
         />
 
         <FormField
           title="Min price"
-          value={form.discounts.min_price}
+          value={form.discounts[0].min_price}
           handleChangeText={e =>
             setForm({
               ...form,
-              discounts: { ...form.discounts, min_price: e },
+              discounts: [{ ...form.discounts[0], min_price: e }],
             })
           }
           keyboardType="numeric"
@@ -233,18 +289,18 @@ const Create = () => {
 
         <FormField
           title="Detail"
-          value={form.details.detail}
+          value={form.details[0].detail}
           handleChangeText={e =>
-            setForm({ ...form, details: { ...form.details, detail: e } })
+            setForm({ ...form, details: [{ ...form.details[0], detail: e }] })
           }
           otherStyles="mt-5"
         />
 
         <FormField
           title="Step"
-          value={form.details.step}
+          value={form.details[0].step}
           handleChangeText={e =>
-            setForm({ ...form, details: { ...form.details, step: e } })
+            setForm({ ...form, details: [{ ...form.details[0], step: e }] })
           }
           keyboardType="numeric"
           otherStyles="mt-5"

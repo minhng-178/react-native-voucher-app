@@ -5,9 +5,9 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import { View, Text, Image, Pressable } from 'react-native';
 
-import { getQR } from '../../../api/qr';
 import { Loader } from '../../../components';
 import { images } from '../../../constants';
+import { getHostQrs, getQR } from '../../../api/qr';
 import { calculateTimeLeft } from '../../../utils/countdown';
 
 const VoucherDetailScreen = () => {
@@ -18,17 +18,27 @@ const VoucherDetailScreen = () => {
     queryFn: () => getQR(id),
   });
 
+  const { data: products } = useQuery({
+    queryKey: ['qrs'],
+    queryFn: getHostQrs,
+  });
+
+  const productExists = products?.results?.some(p => p._id === product?.data?._id) ?? false;
+  const statusProduct = product?.data.status
+
   const [timeLeft, setTimeLeft] = useState(null);
 
   useEffect(() => {
     if (!isLoading && product) {
       setTimeLeft(calculateTimeLeft(product.data.expire_date));
-      const timer = setTimeout(() => {
+
+      const timer = setInterval(() => {
         setTimeLeft(calculateTimeLeft(product.data.expire_date));
       }, 1000);
-      return () => clearTimeout(timer);
+
+      return () => clearInterval(timer);
     }
-  }, [isLoading, product]);
+  }, [product, isLoading]);
 
   if (isLoading) {
     return <Loader isLoading={isLoading} />;
@@ -36,7 +46,7 @@ const VoucherDetailScreen = () => {
 
   return (
     <View className="bg-primary flex-1 p-2">
-      <Stack.Screen
+      {productExists && statusProduct === 1 && <Stack.Screen
         options={{
           title: 'Menu',
           headerRight: () => (
@@ -54,7 +64,8 @@ const VoucherDetailScreen = () => {
             </Link>
           ),
         }}
-      />
+      />}
+
       <Stack.Screen options={{ title: product.data.name }} />
       <Image
         source={{ uri: product.data.image_url || images.defaultVoucher }}
@@ -89,17 +100,29 @@ const VoucherDetailScreen = () => {
           </View>
         </View>
       </View>
-      <Text className="font-pregular text-sm mb-2">{product.data.name}</Text>
+      <Text className="font-pregular text-sm mb-2">{product?.data?.host_id?.fullName}</Text>
       <Text className="font-psemibold text-lg mb-2" numberOfLines={2}>
         {product.data.name}
       </Text>
+      {product.data.discount.map((item, index) => (
+        <Text key={index} className="font-pregular text-sm mb-2">
+          Discount: {item.discount}%
+        </Text>
+      ))}
       <View className="flex-row items-center mb-2">
         <FontAwesome size={16} name="shopping-cart" color="#9B9B9B" />
         <Text className="text-xs text-gray-500 font-pregular ml-2">
-          {product.data.name}
+          {product.data.amount}
         </Text>
       </View>
-      <Text className="text-sm font-pbold">{product.data.price}đ</Text>
+      <Text className="text-lg font-pbold text-secondary-200">{product.data.price}đ</Text>
+
+      {product.data.detail.map((item, index) => (
+        <Text key={index} className="font-pregular text-sm mb-2" >
+          Detail: {item.details}
+        </Text>
+      ))}
+
       <View
         style={{ height: 1, backgroundColor: '#9B9B9B', marginVertical: 10 }}
       />
