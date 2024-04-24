@@ -1,3 +1,4 @@
+import { useAuth } from '../providers/AuthProvider';
 import axiosInstance from './axiosInstance';
 import { orderPath } from './endpoint'; // Import orderPath from your endpoint file
 
@@ -11,11 +12,11 @@ export const createOrder = async form => {
       amount: Number(qr.amount),
     })),
   };
-
-  console.log(data);
+  console.log('Dữ liệu gửi đi:', form);
 
   try {
-    const response = await axiosInstance.post(orderPath, data);
+    const { user } = useAuth();
+    const response = await axiosInstance.post(orderPath, data, user._id);
 
     if (response.status === 201) {
       console.log('Tạo đơn hàng thành công', response.data);

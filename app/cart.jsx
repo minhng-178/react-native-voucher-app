@@ -16,42 +16,42 @@ const Cart = () => {
   const { user } = useAuth();
 
   const [form, setForm] = useState({
-    name_recieve: '',
-    email_recieve: '',
-    qrs: [],
+    name_recieve: user.fullName,
+    note: '',
+    email_recieve: user.email,
+    qrs: items.map(item => ({
+      qr_id: item.product._id,
+      amount: item.quantity,
+    })),
   });
 
-  const handleSubmitOrder = async () => {
-    // if (
-    //   form.name_recieve === '' ||
-    //   form.email_recieve === '' ||
-    //   form.qrs.some(qr => qr.qr_id === '' || qr.amount === '')
-    // ) {
-    //   return Alert.alert('Error', 'Please fill in all fields');
-    // }
-    setUploading(true);
-    try {
-      const orderData = {
-        name_recieve: user.fullName,
-        email_recieve: user.email,
-        qrs: items.map(item => ({
-          qr_id: item.product._id,
-          amount: item.quantity,
-        })),
-      };
+  console.log('====================================');
+  console.log(user);
+  console.log('====================================');
 
-      console.log(orderData);
-      await createOrder(orderData);
+  const handleSubmitOrder = async () => {
+    try {
+      if (
+        form.name_recieve === '' ||
+        form.email_recieve === '' ||
+        form.qrs.some(qr => qr.qr_id === '' || qr.amount === '')
+      ) {
+        return Alert.alert('Error', 'Please fill in all fields');
+      }
+      setUploading(true);
+      console.log('Dữ liệu gửi đi:', form);
+
+      await createOrder(form, user._id);
       toast.show('Order created successfully!', { type: 'success' });
       router.push('/(user))/orders');
     } catch (error) {
       Alert.alert('Error', error.message);
     } finally {
       setForm({
-        name_receive: '',
+        name_recieve: form.name_recieve || '',
         note: '',
-        email_receive: '',
-        qrs: [
+        email_recieve: form.email_recieve || '',
+        qrs: form.qrs || [
           {
             qr_id: '',
             amount: '',
