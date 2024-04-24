@@ -7,6 +7,7 @@ import { getUser } from '../api/user';
 import { getRoles } from '../api/role';
 
 const AuthContext = createContext();
+
 const AuthProvider = ({ children }) => {
   const toast = useToast();
 
@@ -27,7 +28,7 @@ const AuthProvider = ({ children }) => {
     await AsyncStorage.removeItem('user');
     setUser(null);
     setIsLogged(false);
-    router.push('/sign-in');
+    router.push('/');
     toast.show('Logged out!', { type: 'success' });
   };
 
@@ -43,16 +44,16 @@ const AuthProvider = ({ children }) => {
       switch (userRole.name) {
         case 'admin':
           // handle admin role
-          break;
+          return 'admin';
         case 'staff':
           // handle staff role
-          break;
+          return 'staff';
         case 'customer':
           setIsCustomer(true);
-          break;
+          return 'customer';
         case 'host':
           setIsHost(true);
-          break;
+          return 'host';
         default:
           console.log('Unknown role');
       }
@@ -64,12 +65,11 @@ const AuthProvider = ({ children }) => {
   useEffect(() => {
     const loadAuthData = async () => {
       const storedUser = await AsyncStorage.getItem('user');
-      const storedTokens = await AsyncStorage.getItem('tokens');
 
-      if (storedUser && storedTokens) {
+      if (storedUser) {
         setUser(JSON.parse(storedUser));
-        setTokens(JSON.parse(storedTokens));
         setIsLogged(true);
+        await checkUserRole(JSON.parse(storedUser));
       }
     };
     loadAuthData();

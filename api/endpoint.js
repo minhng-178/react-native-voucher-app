@@ -9,9 +9,20 @@ export const refreshTokenPath = '/refresh';
 export const rolesPath = '/roles';
 
 //? qr
+export const qrPath = '/qr';
 export const qrCustomerPath = '/qr/customer';
+export const qrHostCreatePath = '/host/qr';
+export const qrIdPath = id => {
+  return `${qrPath}/${id}`;
+};
+
+//? cate
+export const catePath = '/categories';
 
 //? user
 export const usersPath = id => {
   return `/user/${id}`;
 };
+
+//? upload
+export const uploadPath = '/upload';

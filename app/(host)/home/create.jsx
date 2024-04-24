@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import * as ImagePicker from 'expo-image-picker';
+import { useToast } from 'react-native-toast-notifications';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -11,38 +13,57 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
-  Platform,
   Button,
 } from 'react-native';
 
 import { icons } from '../../../constants';
-import { CustomButton, FormField } from '../../../components';
+import { uploadImage } from '../../../api/upload';
+import { createQR, getQR } from '../../../api/qr';
 import { products } from '../../../assets/products';
+import { CustomButton, FormField } from '../../../components';
 
 const Create = () => {
   const { id } = useLocalSearchParams();
+  const { data: product, isLoading } = useQuery({
+    queryKey: ['qr', id],
+    queryFn: () => getQR(id),
+  });
+
+  const toast = useToast()
   const [uploading, setUploading] = useState(false);
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState('date');
 
   const [form, setForm] = useState({
-    title: '',
+    name: '',
     price: '',
-    thumbnail: null,
+    image: null,
+    amount: '',
     expiredDate: new Date(),
+    discounts: {
+      discount: '',
+      currency: '',
+      min_price: '',
+    },
+    details: {
+      detail: '',
+      step: '',
+    },
   });
 
   const isUpdating = !!id;
 
-  const updatingProduct = products.find(product => product.id === Number(id));
+  const updatingProduct = product?.data || {};
+
+  console.log(updatingProduct);
 
   useEffect(() => {
     if (updatingProduct) {
       setForm({
-        title: updatingProduct.title,
-        price: updatingProduct.price.toString(),
-        thumbnail: updatingProduct.thumbnail,
-        expiredDate: new Date(updatingProduct.expiredDate),
+        title: updatingProduct.name,
+        // price: updatingProduct.price.toString(),
+        // image: updatingProduct.image,
+        // expiredDate: new Date(updatingProduct.expiredDate),
       });
     }
   }, [updatingProduct]);
@@ -75,9 +96,13 @@ const Create = () => {
     });
 
     if (!result.canceled) {
+      const file = result.assets[0];
+
+      const imageFile = await uploadImage(file);
+
       setForm({
         ...form,
-        thumbnail: result.assets[0],
+        image: imageFile.image_url,
       });
     } else {
       setTimeout(() => {
@@ -87,22 +112,46 @@ const Create = () => {
   };
 
   const submit = async () => {
-    if ((form.price === '') | (form.title === '') | !form.thumbnail) {
+    if (
+      (form.name === '') |
+      (form.price === '') |
+      !form.image |
+      (form.amount === '') |
+      (form.discounts.discount === '') |
+      (form.discounts.currency === '') |
+      (form.discounts.min_price === '') |
+      (form.details.detail === '') |
+      (form.details.step === '')
+    ) {
       return Alert.alert('Please provide all fields');
     }
 
     setUploading(true);
     try {
-      Alert.alert('Success', 'Post uploaded successfully');
-      router.push('/home');
+      await createQR(form);
+      toast.show('Create new voucher successful!', { type: 'success' })
+
+      router.push('/(host)/home');
     } catch (error) {
       Alert.alert('Error', error.message);
     } finally {
       setForm({
-        title: '',
-        thumbnail: null,
-        price: 0,
+        name: '',
+        image: null,
+        expiredDate: new Date(),
+        price: '',
+        discounts: {
+          discount: '',
+          currency: '',
+          min_price: '',
+        },
+        details: {
+          detail: '',
+          step: '',
+        },
       });
+
+      setUploading(false);
     }
   };
 
@@ -119,16 +168,80 @@ const Create = () => {
 
         <FormField
           title="Voucher Title"
-          value={form.title}
-          placeholder="Give your Voucher a catchy title..."
-          handleChangeText={e => setForm({ ...form, title: e })}
+          value={form.name}
+          placeholder="Give your Voucher a catchy name..."
+          handleChangeText={e => setForm({ ...form, name: e })}
           otherStyles="mt-5"
         />
 
         <FormField
           title="Price"
           value={form.price}
-          handleChangeText={e => setForm({ ...form, price: Number(e) })}
+          handleChangeText={e => setForm({ ...form, price: e })}
+          keyboardType="numeric"
+          otherStyles="mt-5"
+        />
+
+        <FormField
+          title="Amount"
+          value={form.amount}
+          handleChangeText={e => setForm({ ...form, amount: e })}
+          keyboardType="numeric"
+          otherStyles="mt-5"
+        />
+
+        <FormField
+          title="Discount"
+          value={form.discounts.discount}
+          handleChangeText={e =>
+            setForm({
+              ...form,
+              discounts: { ...form.discounts, discount: e },
+            })
+          }
+          keyboardType="numeric"
+          otherStyles="mt-5"
+        />
+
+        <FormField
+          title="Currency"
+          value={form.discounts.currency}
+          placeholder={'VND'}
+          handleChangeText={e =>
+            setForm({ ...form, discounts: { ...form.discounts, currency: e } })
+          }
+          otherStyles="mt-5"
+        />
+
+        <FormField
+          title="Min price"
+          value={form.discounts.min_price}
+          handleChangeText={e =>
+            setForm({
+              ...form,
+              discounts: { ...form.discounts, min_price: e },
+            })
+          }
+          keyboardType="numeric"
+          otherStyles="mt-5"
+        />
+
+        <FormField
+          title="Detail"
+          value={form.details.detail}
+          handleChangeText={e =>
+            setForm({ ...form, details: { ...form.details, detail: e } })
+          }
+          otherStyles="mt-5"
+        />
+
+        <FormField
+          title="Step"
+          value={form.details.step}
+          handleChangeText={e =>
+            setForm({ ...form, details: { ...form.details, step: e } })
+          }
+          keyboardType="numeric"
           otherStyles="mt-5"
         />
 
@@ -161,9 +274,9 @@ const Create = () => {
           </Text>
 
           <TouchableOpacity onPress={() => openPicker('video')}>
-            {form.thumbnail ? (
+            {form.image ? (
               <Image
-                source={{ uri: form.thumbnail }}
+                source={{ uri: form.image }}
                 resizeMode="cover"
                 className="w-full h-64 rounded-2xl"
               />

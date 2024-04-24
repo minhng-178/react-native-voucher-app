@@ -3,37 +3,37 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { Link, useSegments } from 'expo-router';
+import { images } from '../constants';
 
-const Card = ({ id, title, creator, thumbnail, price, buyed }) => {
+const Card = ({ id, name, image, price, amount }) => {
   const segments = useSegments();
 
   return (
     <Link href={`/${segments[0]}/home/${id}`} asChild>
       <TouchableOpacity
         activeOpacity={0.7}
-        onPress={() => { }}
         className="flex-row items-start mx-2 mb-6 bg-white border border-gray-200 rounded-lg shadow md:max-w-xl hover:bg-gray-100"
       >
         <Image
-          source={{ uri: thumbnail }}
+          source={{ uri: image || images.defaultVoucher }}
           className="flex-1 w-full h-full rounded-lg"
           resizeMode="cover"
         />
 
         <View className="flex-col w-52 justify-between leading-normal ml-3 my-3 gap-y-1 py-2">
-          <Text className="font-plight text-gray-70">{creator}</Text>
+          <Text className="font-plight text-gray-70">{amount}</Text>
 
           <Text
             className="font-psemibold text-sm text-black mb-2"
             numberOfLines={1}
           >
-            {title}
+            {name}
           </Text>
 
           <View className="flex-row items-center mb-2">
             <FontAwesome size={16} name="shopping-cart" color="#9B9B9B" />
             <Text className="text-xs text-gray-500 font-pregular ml-2">
-              {buyed}
+              {amount}
             </Text>
           </View>
 

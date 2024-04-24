@@ -19,20 +19,6 @@ const Search = () => {
       <Stack.Screen
         options={{
           title: 'Search',
-          headerRight: () => (
-            <Link href="/cart" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="shopping-cart"
-                    size={25}
-                    color={'#FFA001'}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
-          ),
         }}
       />
 

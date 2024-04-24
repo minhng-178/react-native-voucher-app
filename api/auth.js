@@ -16,7 +16,7 @@ export const login = async (email, password) => {
     }
 
     if (response.status === 200) {
-      return [response.data.user, response.data.tokens];
+      return response.data.user;
     } else {
       console.log(response.data.message);
     }

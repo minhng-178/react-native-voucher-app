@@ -24,7 +24,7 @@ const SignInScreen = () => {
     setSubmitting(true);
 
     try {
-      const [user] = await login(form.email, form.password);
+      const user = await login(form.email, form.password);
 
       if (!user) {
         Alert.alert('Error', 'Login falied!');
@@ -38,10 +38,12 @@ const SignInScreen = () => {
     }
   };
 
+
+
   if (isLogged) {
     if (isCustomer) return <Redirect href="/(user)/home" />;
 
-    if (isHost) return <Redirect href="/(host)/home" />;
+    else if (isHost) return <Redirect href="/(host)/home" />;
   }
 
   return (
