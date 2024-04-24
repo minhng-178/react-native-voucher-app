@@ -24,12 +24,7 @@ import { CustomButton, FormField } from '../../../components';
 
 const Create = () => {
   const { id } = useLocalSearchParams();
-  const { data: product, isLoading } = useQuery({
-    queryKey: ['qr', id],
-    queryFn: () => getQR(id),
-  });
-
-  const toast = useToast()
+  const toast = useToast();
   const [uploading, setUploading] = useState(false);
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState('date');
@@ -40,33 +35,43 @@ const Create = () => {
     image: null,
     amount: '',
     expiredDate: new Date(),
-    discounts: {
-      discount: '',
-      currency: '',
-      min_price: '',
-    },
-    details: {
-      detail: '',
-      step: '',
-    },
+    discounts: [
+      {
+        discount: '',
+        currency: '',
+        min_price: '',
+      },
+    ],
+    details: [
+      {
+        detail: '',
+        step: '',
+      },
+    ],
   });
 
   const isUpdating = !!id;
+  let updatingProduct = {};
 
-  const updatingProduct = product?.data || {};
+  // if (isUpdating) {
+  //   const { data: product, isLoading } = useQuery({
+  //     queryKey: ['qr', id],
+  //     queryFn: () => getQR(id),
+  //   });
 
-  console.log(updatingProduct);
+  //   updatingProduct = product?.data || {};
+  // }
 
-  useEffect(() => {
-    if (updatingProduct) {
-      setForm({
-        title: updatingProduct.name,
-        // price: updatingProduct.price.toString(),
-        // image: updatingProduct.image,
-        // expiredDate: new Date(updatingProduct.expiredDate),
-      });
-    }
-  }, [updatingProduct]);
+  // useEffect(() => {
+  //   if (updatingProduct) {
+  //     setForm({
+  //       title: updatingProduct.name,
+  //       // price: updatingProduct.price.toString(),
+  //       // image: updatingProduct.image,
+  //       // expiredDate: new Date(updatingProduct.expiredDate),
+  //     });
+  //   }
+  // }, [updatingProduct]);
 
   const onChange = selectedDate => {
     const currentDate = new Date(selectedDate.nativeEvent.timestamp);
@@ -129,7 +134,7 @@ const Create = () => {
     setUploading(true);
     try {
       await createQR(form);
-      toast.show('Create new voucher successful!', { type: 'success' })
+      toast.show('Create new voucher successful!', { type: 'success' });
 
       router.push('/(host)/home');
     } catch (error) {
