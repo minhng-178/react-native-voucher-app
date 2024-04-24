@@ -5,20 +5,31 @@ import { View, Text, Pressable } from 'react-native';
 
 dayjs.extend(relativeTime);
 
-const OrderListItem = ({ order }) => {
+const OrderListItem = ({ order, index }) => {
   const segments = useSegments();
 
+  let statusText = '';
+  let statusColor = '';
+
+  if (order.status === 0) {
+    statusText = 'Pending';
+    statusColor = 'tomato';
+  } else if (order.status === 2) {
+    statusText = 'Success';
+    statusColor = 'green';
+  }
+
   return (
-    <Link href={`/${segments[0]}/orders/${order.id}`} asChild>
+    <Link href={`/${segments[0]}/orders/${order._id}`} asChild>
       <Pressable className="bg-primary flex-row justify-between rounded-md p-2">
         <View>
-          <Text className="font-psemibold mb-1">Order #{order.id}</Text>
+          <Text className="font-psemibold mb-1">Order #{order._id}</Text>
           <Text className="text-gray-500">
-            {dayjs(order.created_at).fromNow()}
+            {dayjs(order.createdAt).fromNow()}
           </Text>
         </View>
 
-        <Text>{order.status}</Text>
+        <Text style={{ color: statusColor }}>{statusText}</Text>
       </Pressable>
     </Link>
   );

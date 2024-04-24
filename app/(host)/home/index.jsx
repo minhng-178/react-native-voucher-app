@@ -51,7 +51,7 @@ const HomeScreen = () => {
           <View className="flex my-2 px-2 space-y-2">
             <SearchInput />
 
-            <FilterInput />
+            {/* <FilterInput /> */}
 
             <View className="w-full flex-1 pt-5 pb-4">
               <Text className="text-lg font-pregular text-gray-500">

@@ -33,5 +33,12 @@ export const usersPath = id => {
 export const uploadPath = '/upload';
 
 //? order
-
 export const orderPath = '/orders';
+
+export const orderIdPath = id => {
+  return `${orderPath}/${id}`;
+};
+
+export const orderUserPath = id => {
+  return `/user/${id}/orders`;
+};

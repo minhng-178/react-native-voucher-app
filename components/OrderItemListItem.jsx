@@ -2,6 +2,9 @@ import React from 'react';
 import { View, Text, Image } from 'react-native';
 
 const OrderItemListItem = ({ item }) => {
+
+  console.log(item);
+
   return (
     <View className="flex-1 flex-row items-center bg-primary rounded-md">
       <Image

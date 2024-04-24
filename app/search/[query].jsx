@@ -49,7 +49,7 @@ const Search = () => {
               <View className="mt-6">
                 <SearchInput initialQuery={query} />
 
-                <FilterInput />
+                {/* <FilterInput /> */}
               </View>
             </View>
           </>

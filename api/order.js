@@ -1,6 +1,44 @@
-import { orderPath } from './endpoint';
+import { orderIdPath, orderPath, orderUserPath } from './endpoint';
 import axiosInstance from './axiosInstance';
-import { useAuth } from '../providers/AuthProvider';
+
+export const getOrders = async () => {
+  try {
+    const response = await axiosInstance.get(orderPath);
+    if (response.status === 201) {
+      return response.data;
+    } else {
+      console.log(response.data.message);
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const getOrdersCustomer = async id => {
+  try {
+    const response = await axiosInstance.get(orderUserPath(id));
+    if (response.status === 201) {
+      return response.data;
+    } else {
+      console.log(response.data.message);
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const getOrder = async id => {
+  try {
+    const response = await axiosInstance.get(orderIdPath(id));
+    if (response.status === 201) {
+      return response.data;
+    } else {
+      console.log(response.data.message);
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 export const createOrder = async dataOrder => {
   const data = {

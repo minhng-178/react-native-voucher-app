@@ -59,15 +59,21 @@ const VoucherScreen = () => {
         )}
         ListHeaderComponent={() =>
           filteredProducts.length > 0 && (
-            <Picker
-              selectedValue={status}
-              onValueChange={itemValue => setStatus(itemValue)}
-            >
-              <Picker.Item label="See All" value="all" />
-              <Picker.Item label="Cancel" value="cancel" />
-              <Picker.Item label="Review" value="review" />
-              <Picker.Item label="Publish" value="publish" />
-            </Picker>
+            <View >
+              <Text className="font-psemibold px-2 text-secondary-100">
+                Total vouchers: {filteredProducts?.length}
+              </Text>
+
+              <Picker
+                selectedValue={status}
+                onValueChange={itemValue => setStatus(itemValue)}
+              >
+                <Picker.Item label="See All" value="all" />
+                <Picker.Item label="Cancel" value="cancel" />
+                <Picker.Item label="Review" value="review" />
+                <Picker.Item label="Publish" value="publish" />
+              </Picker>
+            </View>
           )
         }
         ListEmptyComponent={() => (

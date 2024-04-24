@@ -42,7 +42,7 @@ const Cart = () => {
     }
     setUploading(true);
     try {
-      const responseOrder = await createOrder(dataOrder, user._id);
+      const responseOrder = await createOrder(dataOrder);
       if (responseOrder) {
         toast.show('Order created successfully!', { type: 'success' });
         clearCart();
