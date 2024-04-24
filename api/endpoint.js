@@ -26,3 +26,7 @@ export const usersPath = id => {
 
 //? upload
 export const uploadPath = '/upload';
+
+//? order
+
+export const orderPath = '/orders';

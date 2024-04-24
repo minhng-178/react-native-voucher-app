@@ -1,12 +1,66 @@
 import { StatusBar } from 'expo-status-bar';
-import { View, Text, Platform, FlatList, Image } from 'react-native';
+import { View, Text, Platform, FlatList, Image, Alert } from 'react-native';
 
 import { CustomButton } from '../components';
 import { useCart } from '../providers/CartProvider';
 import CartListItem from '../components/CartListItem';
+import { router } from 'expo-router';
+import { useAuth } from '../providers/AuthProvider';
+import { createOrder } from '../api/order';
+import { useState } from 'react';
 
 const Cart = () => {
   const { items, total } = useCart();
+  const [uploading, setUploading] = useState(false);
+
+  const { user } = useAuth();
+
+  const [form, setForm] = useState({
+    name_recieve: '',
+    email_recieve: '',
+    qrs: [],
+  });
+
+  const handleSubmitOrder = async () => {
+    // if (
+    //   form.name_recieve === '' ||
+    //   form.email_recieve === '' ||
+    //   form.qrs.some(qr => qr.qr_id === '' || qr.amount === '')
+    // ) {
+    //   return Alert.alert('Error', 'Please fill in all fields');
+    // }
+    setUploading(true);
+    try {
+      const orderData = {
+        name_recieve: user.fullName,
+        email_recieve: user.email,
+        qrs: items.map(item => ({
+          qr_id: item.product._id,
+          amount: item.quantity,
+        })),
+      };
+
+      console.log(orderData);
+      await createOrder(orderData);
+      toast.show('Order created successfully!', { type: 'success' });
+      router.push('/(user))/orders');
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    } finally {
+      setForm({
+        name_receive: '',
+        note: '',
+        email_receive: '',
+        qrs: [
+          {
+            qr_id: '',
+            amount: '',
+          },
+        ],
+      });
+    }
+    setUploading(false);
+  };
 
   return (
     <View className="flex-1 px-2">
@@ -25,8 +79,8 @@ const Cart = () => {
       />
       <Text className="font-psemibold text-lg mb-2">Total: ${total}</Text>
       <CustomButton
-        title="Checkout"
-        onPress={() => console.log('checkout')}
+        title="Order"
+        handlePress={handleSubmitOrder}
         containerStyles="mt-auto mb-6"
       />
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
