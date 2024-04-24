@@ -44,7 +44,7 @@ const CartProvider = ({ children }) => {
     setItems(newItems);
     await AsyncStorage.setItem('cartItems', JSON.stringify(newItems));
 
-    toast.show('Add to cart.', {
+    toast.show('Add item to cart.', {
       type: 'success',
     });
   };
@@ -80,8 +80,15 @@ const CartProvider = ({ children }) => {
     0,
   );
 
+  const clearCart = async () => {
+    setItems([]);
+    await AsyncStorage.setItem('cartItems', JSON.stringify([]));
+  };
+
   return (
-    <CartContext.Provider value={{ items, total, addItem, updateQuantity }}>
+    <CartContext.Provider
+      value={{ items, total, addItem, updateQuantity, clearCart }}
+    >
       {children}
     </CartContext.Provider>
   );

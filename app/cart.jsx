@@ -8,14 +8,21 @@ import { router } from 'expo-router';
 import { useAuth } from '../providers/AuthProvider';
 import { createOrder } from '../api/order';
 import { useState } from 'react';
+import { useToast } from 'react-native-toast-notifications';
 
 const Cart = () => {
-  const { items, total } = useCart();
+  const toast = useToast();
+  const { user } = useAuth();
+  const { items, total, clearCart } = useCart();
   const [uploading, setUploading] = useState(false);
 
-  const { user } = useAuth();
+  if (!user) {
+    Alert.alert('Please logged in  to access this page');
+    router.push('/sign-in');
+    return;
+  }
 
-  const [form, setForm] = useState({
+  const dataOrder = {
     name_recieve: user.fullName,
     note: '',
     email_recieve: user.email,
@@ -23,43 +30,29 @@ const Cart = () => {
       qr_id: item.product._id,
       amount: item.quantity,
     })),
-  });
-
-  console.log('====================================');
-  console.log(user);
-  console.log('====================================');
+  };
 
   const handleSubmitOrder = async () => {
+    if (
+      dataOrder.name_recieve === '' ||
+      dataOrder.email_recieve === '' ||
+      dataOrder.qrs.some(qr => qr.qr_id === '' || qr.amount === '')
+    ) {
+      return Alert.alert('Error', 'Please fill in all fields');
+    }
+    setUploading(true);
     try {
-      if (
-        form.name_recieve === '' ||
-        form.email_recieve === '' ||
-        form.qrs.some(qr => qr.qr_id === '' || qr.amount === '')
-      ) {
-        return Alert.alert('Error', 'Please fill in all fields');
+      const responseOrder = await createOrder(dataOrder, user._id);
+      if (responseOrder) {
+        toast.show('Order created successfully!', { type: 'success' });
+        clearCart();
+        router.push('/(user)/orders');
       }
-      setUploading(true);
-      console.log('Dữ liệu gửi đi:', form);
-
-      await createOrder(form, user._id);
-      toast.show('Order created successfully!', { type: 'success' });
-      router.push('/(user))/orders');
     } catch (error) {
       Alert.alert('Error', error.message);
     } finally {
-      setForm({
-        name_recieve: form.name_recieve || '',
-        note: '',
-        email_recieve: form.email_recieve || '',
-        qrs: form.qrs || [
-          {
-            qr_id: '',
-            amount: '',
-          },
-        ],
-      });
+      setUploading(false);
     }
-    setUploading(false);
   };
 
   return (
@@ -77,11 +70,12 @@ const Cart = () => {
         )}
         contentContainerStyle={{ gap: 10, paddingTop: 10 }}
       />
-      <Text className="font-psemibold text-lg mb-2">Total: ${total}</Text>
+      <Text className="font-psemibold text-lg mb-2">Total: {total} VND</Text>
       <CustomButton
         title="Order"
         handlePress={handleSubmitOrder}
         containerStyles="mt-auto mb-6"
+        isLoading={uploading}
       />
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
     </View>

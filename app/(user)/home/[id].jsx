@@ -3,16 +3,18 @@ import { useQuery } from '@tanstack/react-query';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, Alert } from 'react-native';
 
 import { getQR } from '../../../api/qr';
 import { images } from '../../../constants';
 import { useCart } from '../../../providers/CartProvider';
+import { useAuth } from "../../../providers/AuthProvider"
 import { CustomButton, Loader } from '../../../components';
 import { calculateTimeLeft } from '../../../utils/countdown';
 
 const VoucherDetailScreen = () => {
   const { id } = useLocalSearchParams();
+  const { isLogged } = useAuth()
   const { addItem } = useCart();
 
   const { data: product, isLoading } = useQuery({
@@ -40,6 +42,12 @@ const VoucherDetailScreen = () => {
   }
 
   const addToCart = () => {
+    if (!isLogged) {
+      Alert.alert('Please logged in  to continue shopping.');
+      router.push('/sign-in');
+      return;
+    }
+
     addItem(product.data);
     router.push('/cart');
 
