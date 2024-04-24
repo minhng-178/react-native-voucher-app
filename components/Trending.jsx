@@ -3,6 +3,7 @@ import * as Animatable from 'react-native-animatable';
 import { FlatList, ImageBackground, TouchableOpacity } from 'react-native';
 
 import { images } from '../constants';
+import { router, useSegments } from 'expo-router';
 
 const zoomIn = {
   0: {
@@ -22,7 +23,12 @@ const zoomOut = {
   },
 };
 
-const TrendingItem = ({ activeItem, item }) => {
+const TrendingItem = ({ activeItem, item, id }) => {
+  const segments = useSegments();
+
+  const handlePress = () => {
+    router.push(`/${segments[0]}/home/${id}`);
+  };
 
   return (
     <Animatable.View
@@ -33,7 +39,7 @@ const TrendingItem = ({ activeItem, item }) => {
       <TouchableOpacity
         className="relative flex justify-center items-center"
         activeOpacity={0.7}
-        onPress={() => { }}
+        onPress={handlePress}
       >
         <ImageBackground
           source={{
@@ -62,7 +68,7 @@ const Trending = ({ posts }) => {
       horizontal
       keyExtractor={item => item._id}
       renderItem={({ item }) => (
-        <TrendingItem activeItem={activeItem} item={item} />
+        <TrendingItem activeItem={activeItem} item={item} id={item._id} />
       )}
       onViewableItemsChanged={viewableItemsChanged}
       viewabilityConfig={{

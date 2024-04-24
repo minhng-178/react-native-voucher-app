@@ -14,7 +14,7 @@ export default function OrderListNavigator() {
           },
         }}
       >
-        <TopTabs.Screen name="index" options={{ title: 'Orders' }} />
+        <TopTabs.Screen name="index" options={{ title: 'Analysis' }} />
       </TopTabs>
     </SafeAreaView>
   );

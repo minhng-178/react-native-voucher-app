@@ -6,7 +6,7 @@ import { useSegments } from 'expo-router';
 const OrdersScreen = () => {
   return (
     <FlatList
-      data={orders}
+      data={[]}
       renderItem={({ item }) => <OrderListItem order={item} />}
       contentContainerStyle={{ gap: 10, padding: 10 }}
       ListEmptyComponent={() => <EmptyState title={'No orders yet'} />}

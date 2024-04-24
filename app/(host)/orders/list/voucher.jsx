@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Picker } from '@react-native-picker/picker';
-import { View, FlatList, RefreshControl } from 'react-native';
+import { View, FlatList, RefreshControl, Text } from 'react-native';
 
 import { getHostQrs } from '../../../../api/qr';
 import { Card, EmptyState, Loader } from '../../../../components';
@@ -58,9 +58,9 @@ const VoucherScreen = () => {
           />
         )}
         ListHeaderComponent={() =>
-          filteredProducts.length > 0 && (
+          products.results?.length > 0 && (
             <View >
-              <Text className="font-psemibold px-2 text-secondary-100">
+              <Text className="font-psemibold px-2 pt-4 text-secondary-100">
                 Total vouchers: {filteredProducts?.length}
               </Text>
 

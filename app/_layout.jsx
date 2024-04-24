@@ -7,6 +7,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import AuthProvider from '../providers/AuthProvider';
 import CartProvider from '../providers/CartProvider';
+import PaymentUrlProvider from '../providers/PaymentProvider';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -55,15 +56,18 @@ const RootLayout = () => {
     <QueryClientProvider client={queryClient}>
       <ToastProvider duration={2000} offsetTop={50} placement="top">
         <AuthProvider>
-          <CartProvider>
-            <Stack>
-              <Stack.Screen name="(host)" options={{ headerShown: false }} />
-              <Stack.Screen name="(user)" options={{ headerShown: false }} />
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              <Stack.Screen name="index" options={{ headerShown: false }} />
-              <Stack.Screen name="cart" options={{ presentation: 'modal' }} />
-            </Stack>
-          </CartProvider>
+          <PaymentUrlProvider>
+            <CartProvider>
+              <Stack>
+                <Stack.Screen name="(host)" options={{ headerShown: false }} />
+                <Stack.Screen name="(user)" options={{ headerShown: false }} />
+                <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+                <Stack.Screen name="(payment)" options={{ headerShown: false }} />
+                <Stack.Screen name="index" options={{ headerShown: false }} />
+                <Stack.Screen name="cart" options={{ presentation: 'modal' }} />
+              </Stack>
+            </CartProvider>
+          </PaymentUrlProvider>
         </AuthProvider>
       </ToastProvider>
     </QueryClientProvider>

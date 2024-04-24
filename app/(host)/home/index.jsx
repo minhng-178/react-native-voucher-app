@@ -26,7 +26,7 @@ const HomeScreen = () => {
   };
 
   const filterProduct = products?.data
-    ? products.data.filter(product => product.status === 1)
+    ? products.data.filter(product => product.status === 2)
     : [];
 
   const latestProduct = filterProduct.slice(0, 3);

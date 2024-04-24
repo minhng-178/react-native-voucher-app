@@ -42,3 +42,7 @@ export const orderIdPath = id => {
 export const orderUserPath = id => {
   return `/user/${id}/orders`;
 };
+
+//? payment
+
+export const paymentPath = '/payments';

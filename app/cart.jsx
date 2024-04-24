@@ -36,10 +36,15 @@ const Cart = () => {
     if (
       dataOrder.name_recieve === '' ||
       dataOrder.email_recieve === '' ||
-      dataOrder.qrs.some(qr => qr.qr_id === '' || qr.amount === '')
+      dataOrder.qrs.some(qr => qr.qr_id === '' || qr.amount === 0)
     ) {
       return Alert.alert('Error', 'Please fill in all fields');
     }
+
+    if (total <= 10000) {
+      return Alert.alert('Error', 'Total in the cart must be larger than 10000VND');
+    }
+
     setUploading(true);
     try {
       const responseOrder = await createOrder(dataOrder);

@@ -19,8 +19,8 @@ const OrdersScreen = () => {
 
   const filteredProducts = sortedOrders?.filter(product => {
     if (status === 'all') return true;
-    if (status === 'pending' && product.status === 0) return true;
-    if (status === 'cancel' && product.status === 1) return true;
+    if (status === 'pending' && product.status === 1) return true;
+    if (status === 'cancel' && product.status === 0) return true;
     if (status === 'success' && product.status === 2) return true;
     return false;
   });
@@ -34,7 +34,7 @@ const OrdersScreen = () => {
         )}
         ListHeaderComponent={() => {
           return (
-            filteredProducts?.length > 0 && (
+            orders?.data?.length > 0 && (
               <View>
                 <Text className="font-psemibold px-2 text-secondary-100">
                   Total orders: {filteredProducts?.length}
