@@ -163,7 +163,7 @@ const Create = () => {
       } else {
         await createQR(form);
         toast.show('Create new voucher successful!', { type: 'success' });
-        router.push('/(host)/home');
+        router.push('/(host)/orders/list');
       }
     } catch (error) {
       Alert.alert('Error', error.message);

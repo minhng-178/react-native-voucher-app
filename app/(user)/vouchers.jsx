@@ -1,5 +1,5 @@
-import { View, Text, Alert, FlatList, Image } from 'react-native';
-import React from 'react';
+import { View, Text, Alert, FlatList, Image, RefreshControl } from 'react-native';
+import React, { useState } from 'react';
 import { useAuth } from '../../providers/AuthProvider';
 import { useQuery } from '@tanstack/react-query';
 
@@ -13,16 +13,24 @@ const VouchersScreen = () => {
     return null;
   }
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ['qrCodes'],
     queryFn: getQRsCustomer,
   });
+
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
 
   const product = data?.data;
 
   const filteredProduct = product?.filter(item => item.data.length > 0);
 
-  const uniqueProduct = filteredProduct.filter(
+  const uniqueProduct = filteredProduct?.filter(
     (v, i, a) => a.findIndex(t => t.name === v.name) === i,
   );
 
@@ -58,6 +66,9 @@ const VouchersScreen = () => {
             />
           </View>
         )}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </View>
   );

@@ -24,7 +24,7 @@ const VoucherDetailScreen = () => {
   });
 
   const productExists = products?.results?.some(p => p._id === product?.data?._id) ?? false;
-  const statusProduct = product?.data.status
+  const statusProduct = product?.data?.status
 
   const [timeLeft, setTimeLeft] = useState(null);
 
